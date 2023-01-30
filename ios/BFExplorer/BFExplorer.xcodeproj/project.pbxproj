@@ -101,8 +101,6 @@
 		F091CB182951B8E400FCE565 /* ScanPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB0F2951B8E400FCE565 /* ScanPhotoViewController.swift */; };
 		F091CB192951B8E400FCE565 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB102951B8E400FCE565 /* WebViewViewController.swift */; };
 		F091CB1A2951B8E400FCE565 /* CaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB112951B8E400FCE565 /* CaptureViewController.swift */; };
-		F091CB1B2951B8E400FCE565 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB122951B8E400FCE565 /* SecondViewController.swift */; };
-		F091CB1C2951B8E400FCE565 /* CustomTabbarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB132951B8E400FCE565 /* CustomTabbarViewController.swift */; };
 		F091CB2E2951B8EE00FCE565 /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB1E2951B8EE00FCE565 /* RecordView.swift */; };
 		F091CB2F2951B8EE00FCE565 /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB1F2951B8EE00FCE565 /* StatusView.swift */; };
 		F091CB302951B8EE00FCE565 /* CustomPromptPopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB212951B8EE00FCE565 /* CustomPromptPopView.swift */; };
@@ -111,9 +109,6 @@
 		F091CB332951B8EE00FCE565 /* CustomAlertPopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB242951B8EE00FCE565 /* CustomAlertPopView.swift */; };
 		F091CB342951B8EE00FCE565 /* CustomWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB252951B8EE00FCE565 /* CustomWebView.swift */; };
 		F091CB352951B8EE00FCE565 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB262951B8EE00FCE565 /* BottomView.swift */; };
-		F091CB362951B8EE00FCE565 /* qrcode_scan_full_net.png in Resources */ = {isa = PBXBuildFile; fileRef = F091CB282951B8EE00FCE565 /* qrcode_scan_full_net.png */; };
-		F091CB372951B8EE00FCE565 /* qrcode_scan_part_net.png in Resources */ = {isa = PBXBuildFile; fileRef = F091CB292951B8EE00FCE565 /* qrcode_scan_part_net.png */; };
-		F091CB382951B8EE00FCE565 /* AnimationVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB2A2951B8EE00FCE565 /* AnimationVIew.swift */; };
 		F091CB392951B8EE00FCE565 /* ScanNetAnimationImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB2B2951B8EE00FCE565 /* ScanNetAnimationImageView.swift */; };
 		F091CB3A2951B8EE00FCE565 /* ProgressAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB2C2951B8EE00FCE565 /* ProgressAnimationView.swift */; };
 		F091CB3B2951B8EE00FCE565 /* NaviView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CB2D2951B8EE00FCE565 /* NaviView.swift */; };
@@ -164,13 +159,9 @@
 		F091CBBA2951B92D00FCE565 /* NSFileManager+NVHFileSize.m in Sources */ = {isa = PBXBuildFile; fileRef = F091CBB22951B92D00FCE565 /* NSFileManager+NVHFileSize.m */; };
 		F091CBBB2951B92D00FCE565 /* NVHFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F091CBB32951B92D00FCE565 /* NVHFile.m */; };
 		F091CBBC2951B92D00FCE565 /* NVHTarFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F091CBB42951B92D00FCE565 /* NVHTarFile.m */; };
-		F091CBC82951B93B00FCE565 /* WebViewPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CBBE2951B93B00FCE565 /* WebViewPool.swift */; };
-		F091CBC92951B93B00FCE565 /* GlobalTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CBBF2951B93B00FCE565 /* GlobalTimer.swift */; };
 		F091CBCA2951B93B00FCE565 /* Snowflake.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CBC02951B93B00FCE565 /* Snowflake.swift */; };
 		F091CBCB2951B93B00FCE565 /* Schemehandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CBC12951B93B00FCE565 /* Schemehandler.swift */; };
-		F091CBCC2951B93B00FCE565 /* HPKWebViewPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CBC22951B93B00FCE565 /* HPKWebViewPool.swift */; };
 		F091CBCD2951B93B00FCE565 /* OperateMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CBC32951B93B00FCE565 /* OperateMonitor.swift */; };
-		F091CBCE2951B93B00FCE565 /* XXWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CBC42951B93B00FCE565 /* XXWebView.swift */; };
 		F091CBCF2951B93B00FCE565 /* LeadReplyHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CBC52951B93B00FCE565 /* LeadReplyHandle.swift */; };
 		F091CBD02951B93B00FCE565 /* ChangeTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CBC62951B93B00FCE565 /* ChangeTools.swift */; };
 		F091CBD12951B93B00FCE565 /* LeadScriptHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F091CBC72951B93B00FCE565 /* LeadScriptHandle.swift */; };
@@ -302,8 +293,6 @@
 		F091CB0F2951B8E400FCE565 /* ScanPhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanPhotoViewController.swift; sourceTree = "<group>"; };
 		F091CB102951B8E400FCE565 /* WebViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
 		F091CB112951B8E400FCE565 /* CaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureViewController.swift; sourceTree = "<group>"; };
-		F091CB122951B8E400FCE565 /* SecondViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
-		F091CB132951B8E400FCE565 /* CustomTabbarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabbarViewController.swift; sourceTree = "<group>"; };
 		F091CB1E2951B8EE00FCE565 /* RecordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
 		F091CB1F2951B8EE00FCE565 /* StatusView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
 		F091CB212951B8EE00FCE565 /* CustomPromptPopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPromptPopView.swift; sourceTree = "<group>"; };
@@ -312,9 +301,6 @@
 		F091CB242951B8EE00FCE565 /* CustomAlertPopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlertPopView.swift; sourceTree = "<group>"; };
 		F091CB252951B8EE00FCE565 /* CustomWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomWebView.swift; sourceTree = "<group>"; };
 		F091CB262951B8EE00FCE565 /* BottomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
-		F091CB282951B8EE00FCE565 /* qrcode_scan_full_net.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qrcode_scan_full_net.png; sourceTree = "<group>"; };
-		F091CB292951B8EE00FCE565 /* qrcode_scan_part_net.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qrcode_scan_part_net.png; sourceTree = "<group>"; };
-		F091CB2A2951B8EE00FCE565 /* AnimationVIew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationVIew.swift; sourceTree = "<group>"; };
 		F091CB2B2951B8EE00FCE565 /* ScanNetAnimationImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanNetAnimationImageView.swift; sourceTree = "<group>"; };
 		F091CB2C2951B8EE00FCE565 /* ProgressAnimationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressAnimationView.swift; sourceTree = "<group>"; };
 		F091CB2D2951B8EE00FCE565 /* NaviView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NaviView.swift; sourceTree = "<group>"; };
@@ -372,13 +358,9 @@
 		F091CBB32951B92D00FCE565 /* NVHFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NVHFile.m; sourceTree = "<group>"; };
 		F091CBB42951B92D00FCE565 /* NVHTarFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NVHTarFile.m; sourceTree = "<group>"; };
 		F091CBB52951B92D00FCE565 /* UIImage+SVG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+SVG.h"; sourceTree = "<group>"; };
-		F091CBBE2951B93B00FCE565 /* WebViewPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewPool.swift; sourceTree = "<group>"; };
-		F091CBBF2951B93B00FCE565 /* GlobalTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalTimer.swift; sourceTree = "<group>"; };
 		F091CBC02951B93B00FCE565 /* Snowflake.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Snowflake.swift; sourceTree = "<group>"; };
 		F091CBC12951B93B00FCE565 /* Schemehandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schemehandler.swift; sourceTree = "<group>"; };
-		F091CBC22951B93B00FCE565 /* HPKWebViewPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HPKWebViewPool.swift; sourceTree = "<group>"; };
 		F091CBC32951B93B00FCE565 /* OperateMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperateMonitor.swift; sourceTree = "<group>"; };
-		F091CBC42951B93B00FCE565 /* XXWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XXWebView.swift; sourceTree = "<group>"; };
 		F091CBC52951B93B00FCE565 /* LeadReplyHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeadReplyHandle.swift; sourceTree = "<group>"; };
 		F091CBC62951B93B00FCE565 /* ChangeTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTools.swift; sourceTree = "<group>"; };
 		F091CBC72951B93B00FCE565 /* LeadScriptHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeadScriptHandle.swift; sourceTree = "<group>"; };
@@ -580,13 +562,6 @@
 			path = SourceHanSansCN;
 			sourceTree = "<group>";
 		};
-		F0292D8229754FA300C2E464 /* sheetView */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = sheetView;
-			sourceTree = "<group>";
-		};
 		F0292D832975502700C2E464 /* PhotoHandle */ = {
 			isa = PBXGroup;
 			children = (
@@ -676,7 +651,6 @@
 			isa = PBXGroup;
 			children = (
 				F0292D832975502700C2E464 /* PhotoHandle */,
-				F0292D8229754FA300C2E464 /* sheetView */,
 				F33BE3CC2966DE1B006D30B9 /* app */,
 				F091CBDC2951BC4700FCE565 /* BFExplorer-Bridging-Header.h */,
 				F05C43262907F3410082CC75 /* brige.m */,
@@ -705,8 +679,6 @@
 				F0292D7E29754E5700C2E464 /* ScanQRCodeVC.swift */,
 				F091CB102951B8E400FCE565 /* WebViewViewController.swift */,
 				F091CB112951B8E400FCE565 /* CaptureViewController.swift */,
-				F091CB122951B8E400FCE565 /* SecondViewController.swift */,
-				F091CB132951B8E400FCE565 /* CustomTabbarViewController.swift */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -739,9 +711,6 @@
 		F091CB272951B8EE00FCE565 /* animationView */ = {
 			isa = PBXGroup;
 			children = (
-				F091CB282951B8EE00FCE565 /* qrcode_scan_full_net.png */,
-				F091CB292951B8EE00FCE565 /* qrcode_scan_part_net.png */,
-				F091CB2A2951B8EE00FCE565 /* AnimationVIew.swift */,
 				F091CB2B2951B8EE00FCE565 /* ScanNetAnimationImageView.swift */,
 				F091CB2C2951B8EE00FCE565 /* ProgressAnimationView.swift */,
 			);
@@ -858,13 +827,9 @@
 		F091CBBD2951B93B00FCE565 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
-				F091CBBE2951B93B00FCE565 /* WebViewPool.swift */,
-				F091CBBF2951B93B00FCE565 /* GlobalTimer.swift */,
 				F091CBC02951B93B00FCE565 /* Snowflake.swift */,
 				F091CBC12951B93B00FCE565 /* Schemehandler.swift */,
-				F091CBC22951B93B00FCE565 /* HPKWebViewPool.swift */,
 				F091CBC32951B93B00FCE565 /* OperateMonitor.swift */,
-				F091CBC42951B93B00FCE565 /* XXWebView.swift */,
 				F091CBC52951B93B00FCE565 /* LeadReplyHandle.swift */,
 				F091CBC62951B93B00FCE565 /* ChangeTools.swift */,
 				F091CBC72951B93B00FCE565 /* LeadScriptHandle.swift */,
@@ -1007,9 +972,7 @@
 				F01ABAE628D2C7AC0038AF9C /* SourceHanSansCN-Medium.otf in Resources */,
 				F01ABAF028D2C9650038AF9C /* SourceHanSansCN-Regular.ttf in Resources */,
 				F01ABAE928D2C7AC0038AF9C /* SourceHanSansCN-Normal.otf in Resources */,
-				F091CB372951B8EE00FCE565 /* qrcode_scan_part_net.png in Resources */,
 				1903642426EB427E00B82B1C /* LaunchScreen.storyboard in Resources */,
-				F091CB362951B8EE00FCE565 /* qrcode_scan_full_net.png in Resources */,
 				1903642126EB427E00B82B1C /* Assets.xcassets in Resources */,
 				F0E4B66A29713E78005ECC4C /* guid in Resources */,
 				F01ABAEB28D2C7AC0038AF9C /* SourceHanSansCN-ExtraLight.otf in Resources */,
@@ -1073,7 +1036,6 @@
 				F091CB542951B90A00FCE565 /* RecommendAppManager.swift in Sources */,
 				F0BADEB42986820100B8DCCF /* TopBarEntites.swift in Sources */,
 				F033021B28C73E1700BC0266 /* UIScreen+PKExtensions.swift in Sources */,
-				F091CBC82951B93B00FCE565 /* WebViewPool.swift in Sources */,
 				F091CBA32951B92700FCE565 /* RefreshManager.swift in Sources */,
 				F3088F3D2987549C008E7F82 /* UserDefaultManager.swift in Sources */,
 				F0292DA12975502700C2E464 /* FWPopupView.swift in Sources */,
@@ -1137,7 +1099,6 @@
 				19EE04C426FA0EC400C41C1B /* BrowserContainerViewModel.swift in Sources */,
 				F091CB802951B91900FCE565 /* MemoryManager.swift in Sources */,
 				F33B31E6295A8AA6000EB302 /* SplashScreenManager.swift in Sources */,
-				F091CBCC2951B93B00FCE565 /* HPKWebViewPool.swift in Sources */,
 				F091CBB82951B92D00FCE565 /* NVHGzipFile.m in Sources */,
 				F091CB302951B8EE00FCE565 /* CustomPromptPopView.swift in Sources */,
 				F091CB7E2951B91900FCE565 /* ReachabilityManager.swift in Sources */,
@@ -1189,8 +1150,6 @@
 				F033021E28C73E1700BC0266 /* UIControl+PKExtensions.swift in Sources */,
 				F091CB192951B8E400FCE565 /* WebViewViewController.swift in Sources */,
 				F091CC5A28E6994800B2D6CD /* HoverView.swift in Sources */,
-				F091CB1B2951B8E400FCE565 /* SecondViewController.swift in Sources */,
-				F091CB1C2951B8E400FCE565 /* CustomTabbarViewController.swift in Sources */,
 				F033023628C73E1800BC0266 /* UIKit+PKOverride.swift in Sources */,
 				F033023328C73E1800BC0266 /* UIDevice+PKExtensions.swift in Sources */,
 				F0BADEB22986820100B8DCCF /* StatusBarEntites.swift in Sources */,
@@ -1198,7 +1157,6 @@
 				F033021528C73E1700BC0266 /* UILabel+PKExtensions.swift in Sources */,
 				F091CB9D2951B92100FCE565 /* ButtonModel.swift in Sources */,
 				F0A3C3DC2953FA3B00C78D1A /* WKWebViewJavascriptBridgeBase.swift in Sources */,
-				F091CB382951B8EE00FCE565 /* AnimationVIew.swift in Sources */,
 				F0292D9A2975502700C2E464 /* LBXScanLineAnimation.swift in Sources */,
 				F383C6C029557B0D00BD4FE5 /* AdapterHandle.swift in Sources */,
 				F033022D28C73E1800BC0266 /* UIImage+PKExtensions.swift in Sources */,
@@ -1233,10 +1191,8 @@
 				1903645426EB983D00B82B1C /* BrowserContainerContentView.swift in Sources */,
 				F03301CC28BF016200BC0266 /* TouchView.swift in Sources */,
 				196DD6C826EFAC620096A9FB /* BrowserTabContentView.swift in Sources */,
-				F091CBC92951B93B00FCE565 /* GlobalTimer.swift in Sources */,
 				F0292D9E2975502700C2E464 /* PhotoHandler.swift in Sources */,
 				F091CB3A2951B8EE00FCE565 /* ProgressAnimationView.swift in Sources */,
-				F091CBCE2951B93B00FCE565 /* XXWebView.swift in Sources */,
 				F0292DA42975502700C2E464 /* FWPopupCategory.swift in Sources */,
 				F0292D9D2975502700C2E464 /* LBXScanWrapper.swift in Sources */,
 				F091CB142951B8E400FCE565 /* CustomNaviViewController.swift in Sources */,

@@ -53,7 +53,6 @@ class InnerAppFileManager: NSObject {
         fetchAppNames()
         fetchAppIcons()
         
-        GlobalTimer.shared.StartTimer()
         
         operateMonitor.refreshCompleteMonitor.subscribe(onNext: { [weak self] appId in
             guard let strongSelf = self else { return }

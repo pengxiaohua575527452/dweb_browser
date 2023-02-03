@@ -34,6 +34,7 @@ class JsProcessNMM: NativeMicroModule {
         config.userContentController.add(LeadScriptHandle(messageHandle: self), name: "webworkerOnmessage")
         config.userContentController.add(LeadScriptHandle(messageHandle: self), name: "logging")
         let webview = WKWebView(frame: .zero, configuration: config)
+        webview.evaluateJavaScript("const reqidPortMap = new Map();")
         return webview
     }()
     
@@ -61,67 +62,82 @@ class JsProcessNMM: NativeMicroModule {
     }
     
     func hookJavascriptWorker(timestamp: Int, main_code: String) {
-            DispatchQueue.global().async {
-                do {
-                    let injectWorkerDir = URL(fileURLWithPath: Bundle.main.bundlePath + "/app/injectWebView/worker.js")
+        DispatchQueue.global().async {
+            do {
+                let injectWorkerDir = URL(fileURLWithPath: Bundle.main.bundlePath + "/app/injectWebView/worker.js")
 //                    let injectWorkerDir = URL(string: "https://objectjson.waterbang.top/js-process.worker.js?v=\(Date().milliStamp)")!
-                    
-                    let injectWorkerCode = try String(contentsOf: injectWorkerDir, encoding: .utf8)
-                    let workerCode = """
-                        data:utf-8,
-                     ((module,exports=module.exports)=>{\(injectWorkerCode.encodeURIComponent());return module.exports})({exports:{}}).installEnv();
-                     \(main_code)
-                    """.replacingOccurrences(of: "use strict", with: "")
-                    
-                    DispatchQueue.main.async {
-                        let text = """
-                            window.webkit.messageHandlers.logging.postMessage('xxxxxxxx')
-                            try {
-                                globalThis.logging = window.webkit.messageHandlers.logging
-                                let webworker_\(timestamp) = new Worker(`\(workerCode)`)
-                                webworker_\(timestamp).onmessage = (event) => {
-                                    window.webkit.messageHandlers.logging.postMessage('webworker ... onmessage start');
-                                    
-                                    if(Array.isArray(event.data) && event.data[0] === 'fetch-ipc-channel') {
-                                        let port2 = event.data[1]
-                                        port2.onmessage = (evt) => {
-                                            window.webkit.messageHandlers.webworkerOnmessage.postMessage(JSON.stringify(evt.data))
+                
+                let injectWorkerCode = try String(contentsOf: injectWorkerDir, encoding: .utf8)
+                let workerCode = """
+                    data:utf-8,
+                 ((module,exports=module.exports)=>{\(injectWorkerCode.encodeURIComponent());return module.exports})({exports:{}}).installEnv();
+                 \(main_code)
+                """.replacingOccurrences(of: "use strict", with: "")
+                
+                DispatchQueue.main.async {
+                    let text = """
+                        window.webkit.messageHandlers.logging.postMessage('xxxxxxxx');
+                        try {
+                            let webworker_\(timestamp) = new Worker(`\(workerCode)`);
+                            webworker_\(timestamp).onmessage = (event) => {
+                                window.webkit.messageHandlers.logging.postMessage('webworker ... onmessage start');
+                                
+                                if(Array.isArray(event.data) && event.data[0] === 'fetch-ipc-channel') {
+                                    const port2 = event.data[1];
+                                    port2.onmessage = (evt) => {
+                                        if(evt.data && Object.keys(evt.data).includes('req_id')) {
+                                            reqidPortMap.set(evt.data.req_id, [\(timestamp), port2]);
                                         }
+                                        window.webkit.messageHandlers.webworkerOnmessage.postMessage(JSON.stringify(evt.data));
                                     }
-                                    window.webkit.messageHandlers.logging.postMessage('webworker ... onmessage end');
                                 }
-                                window.webkit.messageHandlers.logging.postMessage('xxxxxxxx');
-                            } catch(e) {
-                                window.webkit.messageHandlers.logging.postMessage('error');
-                                window.webkit.messageHandlers.logging.postMessage(e.message);
+                                window.webkit.messageHandlers.logging.postMessage('webworker ... onmessage end');
                             }
-                            '111'
-                        """
-                        self.webview.evaluateJavaScript(text) {(result, error) in
-                            if error != nil {
-                                print(error.debugDescription)
-                            }
+                            window.webkit.messageHandlers.logging.postMessage('xxxxxxxx');
+                        } catch(e) {
+                            window.webkit.messageHandlers.logging.postMessage('error');
+                            window.webkit.messageHandlers.logging.postMessage(e.message);
+                        }
+                        ''
+                    """
+                    self.webview.evaluateJavaScript(text) {(result, error) in
+                        if error != nil {
+                            print(error.debugDescription)
                         }
                     }
-                } catch {
-                    print("JsProcessNMM hookJavascriptWorker error: \(error)")
                 }
+            } catch {
+                print("JsProcessNMM hookJavascriptWorker error: \(error)")
             }
-            
-        
+        }
+    }
+    
+    func portPostMessage(req_id: Int) {
+        DispatchQueue.main.async {
+            self.webview.evaluateJavaScript("""
+                window.webkit.messageHandlers.logging.postMessage('req_id: '+\(req_id));
+                window.webkit.messageHandlers.logging.postMessage('reqidPortMap: '+reqidPortMap.size);
+                const [_, port2] = reqidPortMap.get(\(req_id));
+                port2.postMessage({req_id: \(req_id)});
+                reqidPortMap.delete(\(req_id));
+                window.webkit.messageHandlers.logging.postMessage('reqidPortMap: '+reqidPortMap.size);
+            """)
+        }
     }
 }
 
 extension JsProcessNMM: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        
         if message.name == "webworkerOnmessage" {
             guard let body = message.body as? String else { return }
             let args = JSON.init(parseJSON: body)
             let url = args["url"].stringValue
-            let result = DnsNMM.shared.nativeFetch(urlString: url)
+            let _ = DnsNMM.shared.nativeFetch(urlString: url)
+            self.portPostMessage(req_id: args["req_id"].intValue)
         } else if(message.name == "logging") {
             print(message.body)
         }
     }
 }
+
+

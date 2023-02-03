@@ -86,15 +86,7 @@ class WebViewViewController: UIViewController {
         guard let info = noti.userInfo as? [String:String] else { return }
         guard let urlString = info["param"] else { return }
         
-        if urlString == "desktop.html" {
-            guard let app = UIApplication.shared.delegate as? AppDelegate else { return }
-            
-            app.window = UIWindow(frame: UIScreen.main.bounds)
-            app.window?.makeKeyAndVisible()
-            app.window?.rootViewController = UINavigationController(rootViewController: BrowserContainerViewController())
-        } else {
-            webView.openWebView(html: urlString)
-        }
+        webView.openWebView(html: urlString)
     }
     
     @objc private func interceptAction(noti: Notification) {

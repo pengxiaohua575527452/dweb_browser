@@ -5,6 +5,7 @@
 //  Created by kingsword09 on 2023/1/31.
 //
 
+import UIKit
 import Foundation
 
 class MultiWebViewNMM: NativeMicroModule {
@@ -24,12 +25,19 @@ class MultiWebViewNMM: NativeMicroModule {
     override init() {
         super.init()
         Routers["/open"] = { args in
-            guard let args = args as? [String:Any] else { return }
-            NotificationCenter.default.post(name: NSNotification.Name.openDwebNotification, object: nil, userInfo: ["param":args["url"]])
-            return
-        }
-        Routers["/evaluateJavascript"] = {_ in
-            return
+            guard let args = args as? [String:Any] else { return false }
+            guard let url = args["url"] as? String else { return false }
+            
+            if url == "desktop.html" {
+                guard let app = UIApplication.shared.delegate as? AppDelegate else { return false }
+                
+                app.window = UIWindow(frame: UIScreen.main.bounds)
+                app.window?.makeKeyAndVisible()
+                app.window?.rootViewController = UINavigationController(rootViewController: BrowserContainerViewController())
+                return true
+            } else {
+                return self.open(args: args)
+            }
         }
     }
     
@@ -38,8 +46,6 @@ class MultiWebViewNMM: NativeMicroModule {
         let name = args["name"] as! String
         webview.appId = name
         webview.urlString = sharedInnerAppFileMgr.systemWebAPPURLString(appId: name)! //"iosqmkkx:/index.html"
-        let type = sharedInnerAppFileMgr.systemAPPType(appId: name)
-        let url = sharedInnerAppFileMgr.systemWebAPPURLString(appId: name) ?? ""
         webview.urlString = args["url"] as! String
 
         let webviewNode = viewTree!.createNode(webview: webview, args: args)

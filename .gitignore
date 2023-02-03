@@ -3,6 +3,7 @@ Pods
 .DS_Store
 ios/BFExplorer/BFExplorer.xcworkspace
 .build/
+xcuserdata/
 
 # android
 .gradle/

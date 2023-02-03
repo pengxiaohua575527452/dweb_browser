@@ -78,40 +78,43 @@ class NativeMicroModule: MicroModule {
         
         _inited_common_ipc_on_message = true
         
-        onConnect { ipc in
-            ipc.onMessage { request in
-                guard let req = request as? IpcRequest else { return }
-
-                let pathnames = req.parsed_url?.pathComponents
-                guard let pathname = pathnames?.joined(separator: "") else { return }
-                
-                var res: IpcResponse?
-                
-                for handler_schema in self._common_ipc_on_message_handlers {
-                    if (
-                        handler_schema.matchMode == MatchMode.full
-                        ? pathname == handler_schema.pathname
-                        : handler_schema.matchMode == MatchMode.prefix
-                        ? pathname.hasPrefix(handler_schema.pathname)
-                        : false
-                    ) {
-                        let result = handler_schema.handler(req, ipc: ipc)
-                        if result is IpcResponse {
-                            res = result as! IpcResponse
-                        } else {
-                            // todo
-//                            res =
-                        }
-                    }
-                }
-                
-                if res == nil {
-                    res = IpcResponse(req_id: req.req_id, statusCode: 404, body: "no found handler for '\(pathname)'", headers: ["Content-Type": "text/plain"])
-                }
-                
-                return ipc.postMessage(data: res!)
-            }
-        }
+//        onConnect(ipcClosure: T##IpcClosure)
+        
+//        onConnect { ipcClosure in
+//            ipcClosure
+//            ipc.onMessage { request in
+//                guard let req = request as? IpcRequest else { return false }
+//
+//                let pathnames = req.parsed_url?.pathComponents
+//                guard let pathname = pathnames?.joined(separator: "") else { return false }
+//
+//                var res: IpcResponse?
+//
+//                for handler_schema in self._common_ipc_on_message_handlers {
+//                    if (
+//                        handler_schema.matchMode == MatchMode.full
+//                        ? pathname == handler_schema.pathname
+//                        : handler_schema.matchMode == MatchMode.prefix
+//                        ? pathname.hasPrefix(handler_schema.pathname)
+//                        : false
+//                    ) {
+//                        let result = handler_schema.handler(req, ipc: ipc)
+//                        if result is IpcResponse {
+//                            res = result as! IpcResponse
+//                        } else {
+//                            // todo
+////                            res =
+//                        }
+//                    }
+//                }
+//
+//                if res == nil {
+//                    res = IpcResponse(req_id: req.req_id, statusCode: 404, body: "no found handler for '\(pathname)'", headers: ["Content-Type": "text/plain"])
+//                }
+//
+//                return ipc.postMessage(data: res!)
+//            }
+//        }
     }
     
 }
@@ -145,7 +148,5 @@ struct RequestCommonHandlerSchema: Hashable {
         return nil
     }
 }
-
-
 
 

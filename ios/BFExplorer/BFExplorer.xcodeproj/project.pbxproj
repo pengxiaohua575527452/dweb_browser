@@ -201,6 +201,17 @@
 		F39A87172970F53E00CC7126 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39A87162970F53E00CC7126 /* CameraManager.swift */; };
 		F39A87192970F88C00CC7126 /* CameraExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39A87182970F88C00CC7126 /* CameraExtensions.swift */; };
 		F39A871D2971312300CC7126 /* ImageSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39A871C2971312300CC7126 /* ImageSaver.swift */; };
+		F3A74E882987B505008614BD /* DnsNMM.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74E872987B505008614BD /* DnsNMM.swift */; };
+		F3A74E8A2987B68C008614BD /* DwebModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74E892987B68C008614BD /* DwebModel.swift */; };
+		F3A74E8C2987BA99008614BD /* NativeMicroModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74E8B2987BA99008614BD /* NativeMicroModule.swift */; };
+		F3A74E902987C581008614BD /* ViewTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74E8F2987C581008614BD /* ViewTree.swift */; };
+		F3A74E922988E7EA008614BD /* JsMicroModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74E912988E7EA008614BD /* JsMicroModule.swift */; };
+		F3A74E9629890C58008614BD /* BootNMM.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74E9529890C58008614BD /* BootNMM.swift */; };
+		F3A74E9829890C7E008614BD /* MultiWebViewNMM.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74E9729890C7E008614BD /* MultiWebViewNMM.swift */; };
+		F3A74EA4298A6078008614BD /* MicroModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74EA3298A6078008614BD /* MicroModule.swift */; };
+		F3A74EA6298B90E5008614BD /* Dictionary_extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74EA5298B90E5008614BD /* Dictionary_extension.swift */; };
+		F3A74EAA298BB6C0008614BD /* URL_extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74EA9298BB6C0008614BD /* URL_extension.swift */; };
+		F3A74EAE298BC21D008614BD /* JsProcessNMM.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74EAD298BC21D008614BD /* JsProcessNMM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -411,6 +422,17 @@
 		F39A87162970F53E00CC7126 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		F39A87182970F88C00CC7126 /* CameraExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraExtensions.swift; sourceTree = "<group>"; };
 		F39A871C2971312300CC7126 /* ImageSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSaver.swift; sourceTree = "<group>"; };
+		F3A74E872987B505008614BD /* DnsNMM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DnsNMM.swift; sourceTree = "<group>"; };
+		F3A74E892987B68C008614BD /* DwebModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DwebModel.swift; sourceTree = "<group>"; };
+		F3A74E8B2987BA99008614BD /* NativeMicroModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeMicroModule.swift; sourceTree = "<group>"; };
+		F3A74E8F2987C581008614BD /* ViewTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewTree.swift; sourceTree = "<group>"; };
+		F3A74E912988E7EA008614BD /* JsMicroModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsMicroModule.swift; sourceTree = "<group>"; };
+		F3A74E9529890C58008614BD /* BootNMM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootNMM.swift; sourceTree = "<group>"; };
+		F3A74E9729890C7E008614BD /* MultiWebViewNMM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiWebViewNMM.swift; sourceTree = "<group>"; };
+		F3A74EA3298A6078008614BD /* MicroModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroModule.swift; sourceTree = "<group>"; };
+		F3A74EA5298B90E5008614BD /* Dictionary_extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary_extension.swift; sourceTree = "<group>"; };
+		F3A74EA9298BB6C0008614BD /* URL_extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL_extension.swift; sourceTree = "<group>"; };
+		F3A74EAD298BC21D008614BD /* JsProcessNMM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsProcessNMM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -675,6 +697,7 @@
 		F05C41F42907F0E30082CC75 /* Plaoc */ = {
 			isa = PBXGroup;
 			children = (
+				F3A74E862987B4F1008614BD /* bfs */,
 				F0292D832975502700C2E464 /* PhotoHandle */,
 				F0292D8229754FA300C2E464 /* sheetView */,
 				F33BE3CC2966DE1B006D30B9 /* app */,
@@ -759,6 +782,8 @@
 				F091CB422951B90200FCE565 /* UIDevice_extension.swift */,
 				F091CB432951B90200FCE565 /* UIImage_extension.swift */,
 				F091CB442951B90200FCE565 /* UIView_extension.swift */,
+				F3A74EA5298B90E5008614BD /* Dictionary_extension.swift */,
+				F3A74EA9298BB6C0008614BD /* URL_extension.swift */,
 			);
 			path = extension;
 			sourceTree = "<group>";
@@ -940,6 +965,30 @@
 				F39A871C2971312300CC7126 /* ImageSaver.swift */,
 			);
 			path = camera;
+			sourceTree = "<group>";
+		};
+		F3A74E862987B4F1008614BD /* bfs */ = {
+			isa = PBXGroup;
+			children = (
+				F3A74E992989F79F008614BD /* microModule */,
+			);
+			path = bfs;
+			sourceTree = "<group>";
+		};
+		F3A74E992989F79F008614BD /* microModule */ = {
+			isa = PBXGroup;
+			children = (
+				F3A74EA3298A6078008614BD /* MicroModule.swift */,
+				F3A74E8B2987BA99008614BD /* NativeMicroModule.swift */,
+				F3A74E9529890C58008614BD /* BootNMM.swift */,
+				F3A74E9729890C7E008614BD /* MultiWebViewNMM.swift */,
+				F3A74E912988E7EA008614BD /* JsMicroModule.swift */,
+				F3A74E872987B505008614BD /* DnsNMM.swift */,
+				F3A74E892987B68C008614BD /* DwebModel.swift */,
+				F3A74EAD298BC21D008614BD /* JsProcessNMM.swift */,
+				F3A74E8F2987C581008614BD /* ViewTree.swift */,
+			);
+			path = microModule;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1127,6 +1176,7 @@
 				F0BADEB32986820100B8DCCF /* AlertEntites.swift in Sources */,
 				F01ABACE28D07AE30038AF9C /* LinkListPageVC.swift in Sources */,
 				F091CBBB2951B92D00FCE565 /* NVHFile.m in Sources */,
+				F3A74E902987C581008614BD /* ViewTree.swift in Sources */,
 				F091CB532951B90A00FCE565 /* InnerAppManager.swift in Sources */,
 				F091CB7D2951B91900FCE565 /* CacheManager.swift in Sources */,
 				F0292DA52975502700C2E464 /* FWPopupItem.swift in Sources */,
@@ -1143,6 +1193,7 @@
 				F091CB7E2951B91900FCE565 /* ReachabilityManager.swift in Sources */,
 				F033020328C73E1700BC0266 /* CGGeometry+PKExtensions.swift in Sources */,
 				F03301DA28C735DC00BC0266 /* OverlayBalloonView.swift in Sources */,
+				F3A74E882987B505008614BD /* DnsNMM.swift in Sources */,
 				F03301FD28C73E1700BC0266 /* UIButton+PKExtensions.swift in Sources */,
 				18919458288FD29A009242B9 /* LocalDataMgr.swift in Sources */,
 				F091CB472951B90200FCE565 /* String_extension.swift in Sources */,
@@ -1169,8 +1220,10 @@
 				F033020C28C73E1700BC0266 /* UIViewController+PKExtensions.swift in Sources */,
 				F091CB312951B8EE00FCE565 /* CustomBasePopView.swift in Sources */,
 				F03301F728C73E1700BC0266 /* UIColor+PKExtensions.swift in Sources */,
+				F3A74EA6298B90E5008614BD /* Dictionary_extension.swift in Sources */,
 				F091CB9B2951B92100FCE565 /* AlertConfiguration.swift in Sources */,
 				F091CB322951B8EE00FCE565 /* CustomConfirmPopView.swift in Sources */,
+				F3A74E8C2987BA99008614BD /* NativeMicroModule.swift in Sources */,
 				182EF46328B62DE4001E039E /* UIImage+Text.swift in Sources */,
 				F0292DA8297686CF00C2E464 /* AppVersionManager.swift in Sources */,
 				F091CB8F2951B91900FCE565 /* FileSystemManager.swift in Sources */,
@@ -1198,6 +1251,7 @@
 				F033021528C73E1700BC0266 /* UILabel+PKExtensions.swift in Sources */,
 				F091CB9D2951B92100FCE565 /* ButtonModel.swift in Sources */,
 				F0A3C3DC2953FA3B00C78D1A /* WKWebViewJavascriptBridgeBase.swift in Sources */,
+				F3A74E8A2987B68C008614BD /* DwebModel.swift in Sources */,
 				F091CB382951B8EE00FCE565 /* AnimationVIew.swift in Sources */,
 				F0292D9A2975502700C2E464 /* LBXScanLineAnimation.swift in Sources */,
 				F383C6C029557B0D00BD4FE5 /* AdapterHandle.swift in Sources */,
@@ -1207,7 +1261,9 @@
 				F091CBA42951B92700FCE565 /* BFSNetworkManager.swift in Sources */,
 				F091CB842951B91900FCE565 /* BrowserManager.swift in Sources */,
 				F0292D972975502700C2E464 /* LBXScanNetAnimation.swift in Sources */,
+				F3A74E922988E7EA008614BD /* JsMicroModule.swift in Sources */,
 				F091CBB72951B92D00FCE565 /* NVHProgress.m in Sources */,
+				F3A74E9629890C58008614BD /* BootNMM.swift in Sources */,
 				F091CB852951B91900FCE565 /* QueueManager.swift in Sources */,
 				F091CB3B2951B8EE00FCE565 /* NaviView.swift in Sources */,
 				F091CB912951B91900FCE565 /* StreamFileManager.swift in Sources */,
@@ -1224,10 +1280,13 @@
 				F091CBCF2951B93B00FCE565 /* LeadReplyHandle.swift in Sources */,
 				F033020628C73E1700BC0266 /* UIView+PKExtensions.swift in Sources */,
 				F091CB552951B90A00FCE565 /* UserAppManager.swift in Sources */,
+				F3A74E9829890C7E008614BD /* MultiWebViewNMM.swift in Sources */,
 				1963484D27088A2F005CB874 /* BrowserTabContentView+StatusBarBackgroundView.swift in Sources */,
+				F3A74EA4298A6078008614BD /* MicroModule.swift in Sources */,
 				F091CBA52951B92700FCE565 /* NetworkMap.swift in Sources */,
 				F091CB832951B91900FCE565 /* NotificationManager.swift in Sources */,
 				1903644D26EB945900B82B1C /* BrowserTabViewController.swift in Sources */,
+				F3A74EAE298BC21D008614BD /* JsProcessNMM.swift in Sources */,
 				1903645826EBB37700B82B1C /* BrowserToolbar.swift in Sources */,
 				19128CE326FC02D20057E46D /* BrowserContainerViewController+AddressBarsAnimation.swift in Sources */,
 				1903645426EB983D00B82B1C /* BrowserContainerContentView.swift in Sources */,
@@ -1241,6 +1300,7 @@
 				F0292D9D2975502700C2E464 /* LBXScanWrapper.swift in Sources */,
 				F091CB142951B8E400FCE565 /* CustomNaviViewController.swift in Sources */,
 				F033023A28C74F0100BC0266 /* OverlayShareView.swift in Sources */,
+				F3A74EAA298BB6C0008614BD /* URL_extension.swift in Sources */,
 				F39A87172970F53E00CC7126 /* CameraManager.swift in Sources */,
 				F0292DA62975502700C2E464 /* FWPColorCategory.swift in Sources */,
 				F01ABAD028D07AE30038AF9C /* Model.swift in Sources */,

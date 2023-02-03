@@ -101,4 +101,11 @@ extension String {
             (0..<match.numberOfRanges).map { match.range(at: $0).location == NSNotFound ? "" : nsString.substring(with: match.range(at: $0)) }
         } ?? []
     }
+    
+    //字符串编码
+    func encodeURIComponent() -> String {
+        let characterSet = NSMutableCharacterSet.urlQueryAllowed
+
+        return self.addingPercentEncoding(withAllowedCharacters: characterSet) ?? ""
+    }
 }

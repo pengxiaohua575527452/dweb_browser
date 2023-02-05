@@ -40,15 +40,15 @@ class DnsNMM: NativeMicroModule {
         Routers["/install-js"] = { _ in
             return
         }
-        Routers["/open"] = { args in
-            guard let args = args as? [String:MMID] else { return false }
-            
-            if args["app_id"] != nil {
-                self.open(mmid: args["app_id"]!)
-            }
-            
-            return true
-        }
+//        Routers["/open"] = { args in
+//            guard let args = args as? [String:MMID] else { return false }
+//            
+//            if args["app_id"] != nil {
+//                self.open(mmid: args["app_id"]!)
+//            }
+//            
+//            return true
+//        }
         Routers["/close"] = { args in
             guard let args = args as? [String:MMID] else { return false }
             
@@ -58,6 +58,16 @@ class DnsNMM: NativeMicroModule {
             
             return true
         }
+        
+        self.registerCommonIpcOnMessageHandler(commonHandlerSchema: RequestCommonHandlerSchema(pathname: "/open", matchMode: MatchMode.full, input: ["app_id":"mmid"], output: "boolean") { args, _ in
+            guard let args = args as? [String:MMID] else { return false }
+            
+            if args["app_id"] != nil {
+                self.open(mmid: args["app_id"]!)
+            }
+            
+            return true
+        })()
         
         return open(mmid: "boot.sys.dweb")
     }

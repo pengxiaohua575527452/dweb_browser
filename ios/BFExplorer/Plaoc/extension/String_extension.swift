@@ -108,4 +108,11 @@ extension String {
 
         return self.addingPercentEncoding(withAllowedCharacters: characterSet) ?? ""
     }
+    
+    //字符串截断
+    func slice(_ start: Int, _ end: Int) -> String {
+        let beginIndex = self.index(self.startIndex, offsetBy: 0)
+        let endIndex = self.index(self.startIndex, offsetBy: end > 0 ? end - 1 : (self.count - 1 + end))
+        return String(self[beginIndex...endIndex])
+    }
 }

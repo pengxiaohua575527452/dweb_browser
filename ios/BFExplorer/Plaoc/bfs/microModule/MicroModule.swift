@@ -8,15 +8,6 @@
 import Foundation
 
 /** 微组件抽象类 */
-//protocol MicroModule {
-//    var mmid: String { get }
-//    var ipc: Ipc { get }
-//
-//    func bootstrap()
-//}
-
-typealias MMID = String
-
 class MicroModule: NSObject {
     var mmid: MMID {
         get {
@@ -28,53 +19,58 @@ class MicroModule: NSObject {
     }
     var running = false
 
-    func before_bootstrap() {
+    internal func before_bootstrap() throws {
         if running {
-            print("module \(mmid) already running")
-            return
+            throw MicroModuleError.moduleError("module \(mmid) already running")
         }
         running = true
     }
 
-    func _bootstrap() -> Any {
+    internal func _bootstrap() -> Any {
         return ""
     }
-    func after_bootstrap() {}
+    internal func after_bootstrap() {}
 
     func bootstrap() {
-        before_bootstrap()
+        do {
+            try before_bootstrap()
 
-        let _ = _bootstrap()
+            let _ = _bootstrap()
 
-        after_bootstrap()
+            after_bootstrap()
+        } catch {
+            print(error)
+        }
     }
 
-    func before_shutdown() {
+    internal func before_shutdown() throws {
         if !running {
-            print("module \(mmid) already shutdown")
-            return
+            throw MicroModuleError.moduleError("module \(mmid) already shutdown")
         }
         running = false
     }
     internal func _shutdown() -> Any {
         return ""
     }
-    func after_shutdown() {}
+    internal func after_shutdown() {}
     func shutdown() -> Void {
-        before_shutdown()
+        do {
+            try before_shutdown()
 
-        let _ = _shutdown()
+            let _ = _shutdown()
 
-        after_shutdown()
+            after_shutdown()
+        } catch {
+            print(error)
+        }
     }
 
-    func _connect(from: MicroModule) -> Ipc {
-        return Ipc()
+    func _connect(from: MicroModule) -> NativeIpc {
+        return NativeIpc(port1: "port1", port2: "port2")
     }
-    func connect(from: MicroModule) -> Ipc? {
+    func connect(from: MicroModule) throws -> NativeIpc? {
         if !running {
-            print("module no running")
-            return nil
+            throw MicroModuleError.moduleError("module no running")
         }
         return _connect(from: from)
     }

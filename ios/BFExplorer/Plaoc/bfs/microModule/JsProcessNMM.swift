@@ -67,12 +67,12 @@ class JsProcessNMM: NativeMicroModule {
                 let injectWorkerDir = URL(fileURLWithPath: Bundle.main.bundlePath + "/app/injectWebView/worker.js")
 //                    let injectWorkerDir = URL(string: "https://objectjson.waterbang.top/js-process.worker.js?v=\(Date().milliStamp)")!
                 
-                let injectWorkerCode = try String(contentsOf: injectWorkerDir, encoding: .utf8)
+                let injectWorkerCode = try String(contentsOf: injectWorkerDir, encoding: .utf8).replacingOccurrences(of: "\"use strict\";", with: "")
                 let workerCode = """
                     data:utf-8,
                  ((module,exports=module.exports)=>{\(injectWorkerCode.encodeURIComponent());return module.exports})({exports:{}}).installEnv();
                  \(main_code)
-                """.replacingOccurrences(of: "use strict", with: "")
+                """
                 
                 DispatchQueue.main.async {
                     let text = """
@@ -113,16 +113,14 @@ class JsProcessNMM: NativeMicroModule {
     }
     
     func portPostMessage(req_id: Int) {
-        DispatchQueue.main.async {
-            self.webview.evaluateJavaScript("""
-                window.webkit.messageHandlers.logging.postMessage('req_id: '+\(req_id));
-                window.webkit.messageHandlers.logging.postMessage('reqidPortMap: '+reqidPortMap.size);
-                const [_, port2] = reqidPortMap.get(\(req_id));
-                port2.postMessage({req_id: \(req_id)});
-                reqidPortMap.delete(\(req_id));
-                window.webkit.messageHandlers.logging.postMessage('reqidPortMap: '+reqidPortMap.size);
-            """)
-        }
+        self.webview.evaluateJavaScript("""
+            window.webkit.messageHandlers.logging.postMessage('req_id: '+\(req_id));
+            window.webkit.messageHandlers.logging.postMessage('reqidPortMap: '+reqidPortMap.size);
+            const [_, port2] = reqidPortMap.get(\(req_id));
+            port2.postMessage({req_id: \(req_id)});
+            reqidPortMap.delete(\(req_id));
+            window.webkit.messageHandlers.logging.postMessage('reqidPortMap: '+reqidPortMap.size);
+        """)
     }
 }
 

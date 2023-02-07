@@ -10,15 +10,6 @@ import SwiftyJSON
 import Foundation
 
 class JsProcessNMM: NativeMicroModule {
-    override var mmid: MMID {
-        get {
-            "js.sys.dweb"
-        }
-        set {
-            "js.sys.dweb"
-        }
-    }
-    
     private lazy var webview: WKWebView = {
         let config = WKWebViewConfiguration()
         
@@ -33,14 +24,17 @@ class JsProcessNMM: NativeMicroModule {
         
         config.userContentController.add(LeadScriptHandle(messageHandle: self), name: "webworkerOnmessage")
         config.userContentController.add(LeadScriptHandle(messageHandle: self), name: "logging")
+        config.userContentController.add(LeadScriptHandle(messageHandle: self), name: "portForward")
         let webview = WKWebView(frame: .zero, configuration: config)
-        webview.evaluateJavaScript("const reqidPortMap = new Map();")
+        webview.evaluateJavaScript("const reqidPortMap = new Map(); const processPortMap = new Map();")
         return webview
     }()
     
+    var all_ipc_cache: [Int:NativeIpc] = [:]
+    
     private var acc_process_id = 0
-    override init() {
-        super.init()
+    override init(mmid:MMID = "js.sys.dweb") {
+        super.init(mmid:mmid)
         _ = webview
         
         Routers["/create-process"] = { args in
@@ -57,7 +51,24 @@ class JsProcessNMM: NativeMicroModule {
             return timestamp
         }
         Routers["/create-ipc"] = { args in
-            return
+            guard let args = args as? [String:Int], let process_id = args["worker_id"] as? Int else { return nil }
+            
+            if self.all_ipc_cache.index(forKey: process_id) == nil {
+                print("JsProcessNMM create-ipc no found worker by id '\(process_id)'")
+                return nil
+            }
+            
+            DispatchQueue.main.async {
+                self.webview.evaluateJavaScript("""
+                    const port1 = processPortMap.get(\(process_id));
+                    port1.onmessage = (evt) => {
+                        evt.data['process_id'] = \(process_id);
+                        window.webkit.messageHandlers.portForward.postMessage(evt.data);
+                    }
+                """)
+            }
+            
+            return process_id
         }
     }
     
@@ -65,8 +76,6 @@ class JsProcessNMM: NativeMicroModule {
         DispatchQueue.global().async {
             do {
                 let injectWorkerDir = URL(fileURLWithPath: Bundle.main.bundlePath + "/app/injectWebView/worker.js")
-//                    let injectWorkerDir = URL(string: "https://objectjson.waterbang.top/js-process.worker.js?v=\(Date().milliStamp)")!
-                
                 let injectWorkerCode = try String(contentsOf: injectWorkerDir, encoding: .utf8).replacingOccurrences(of: "\"use strict\";", with: "")
                 let workerCode = """
                     data:utf-8,
@@ -79,21 +88,17 @@ class JsProcessNMM: NativeMicroModule {
                         window.webkit.messageHandlers.logging.postMessage('xxxxxxxx');
                         try {
                             let webworker_\(timestamp) = new Worker(`\(workerCode)`);
-                            webworker_\(timestamp).onmessage = (event) => {
-                                window.webkit.messageHandlers.logging.postMessage('webworker ... onmessage start');
-                                
-                                if(Array.isArray(event.data) && event.data[0] === 'fetch-ipc-channel') {
-                                    const port2 = event.data[1];
-                                    port2.onmessage = (evt) => {
-                                        if(evt.data && Object.keys(evt.data).includes('req_id')) {
-                                            reqidPortMap.set(evt.data.req_id, [\(timestamp), port2]);
-                                        }
-                                        window.webkit.messageHandlers.webworkerOnmessage.postMessage(JSON.stringify(evt.data));
-                                    }
+                            const {port1, port2} = new MessageChannel();
+                            webworker_\(timestamp).postMessage(['fetch-ipc-channel', port2], [port2]);
+                            processPortMap.set(\(timestamp), port1);
+                        
+                            port1.onmessage = (evt) => {
+                                if(evt.data && Object.keys(evt.data).includes('req_id')) {
+                                    reqidPortMap.set(evt.data.req_id, [\(timestamp), port1]);
                                 }
-                                window.webkit.messageHandlers.logging.postMessage('webworker ... onmessage end');
+                                evt.data['process_id'] = \(timestamp);
+                                window.webkit.messageHandlers.webworkerOnmessage.postMessage(JSON.stringify(evt.data));
                             }
-                            window.webkit.messageHandlers.logging.postMessage('xxxxxxxx');
                         } catch(e) {
                             window.webkit.messageHandlers.logging.postMessage('error');
                             window.webkit.messageHandlers.logging.postMessage(e.message);
@@ -112,30 +117,67 @@ class JsProcessNMM: NativeMicroModule {
         }
     }
     
-    func portPostMessage(req_id: Int) {
+    func portPostMessage(res: IpcResponse) {
+        print(res.toDic())
+        let resStr = ChangeTools.dicValueString(res.toDic())
         self.webview.evaluateJavaScript("""
-            window.webkit.messageHandlers.logging.postMessage('req_id: '+\(req_id));
+            window.webkit.messageHandlers.logging.postMessage('req_id: '+\(res.req_id));
             window.webkit.messageHandlers.logging.postMessage('reqidPortMap: '+reqidPortMap.size);
-            const [_, port2] = reqidPortMap.get(\(req_id));
-            port2.postMessage({req_id: \(req_id)});
-            reqidPortMap.delete(\(req_id));
+            const [_, port1] = reqidPortMap.get(\(res.req_id));
+            port1.postMessage(\(resStr);
+            reqidPortMap.delete(\(res.req_id));
             window.webkit.messageHandlers.logging.postMessage('reqidPortMap: '+reqidPortMap.size);
-        """)
+        """) { result, error in
+            print(error)
+        }
     }
 }
 
 extension JsProcessNMM: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "webworkerOnmessage" {
-            guard let body = message.body as? String else { return }
-            let args = JSON.init(parseJSON: body)
+            print("webworkerOnmessage")
+            guard let reqBody = message.body as? String else { return }
+            let args = JSON.init(parseJSON: reqBody)
             let url = args["url"].stringValue
-            let _ = DnsNMM.shared.nativeFetch(urlString: url)
-            self.portPostMessage(req_id: args["req_id"].intValue)
+            let process_id = args["process_id"].intValue
+            
+//            if self.all_ipc_cache.index(forKey: process_id) == nil { return }
+            
+            print(url)
+            let resBody = DnsNMM.shared.nativeFetch(urlString: url, microModule: self)
+            
+            var res: IpcResponse
+            let req_id = args["req_id"].intValue
+            let headers = ["Content-Type":"text/plain"]
+//            do {
+                if let body = resBody as? String {
+                    res = IpcResponse(req_id: req_id, statusCode: 200, body: body, headers: headers)
+                } else if let body = resBody as? [String:Any] {
+                    res = IpcResponse(req_id: req_id, statusCode: 200, body: ChangeTools.dicValueString(body) ?? "", headers: headers)
+                } else if resBody != nil {
+//                    try res = IpcResponse(req_id: req_id, statusCode: 200, body: "\(resBody)", headers: headers)
+                    res = IpcResponse(req_id: req_id, statusCode: 200, body: "\(resBody!)", headers: headers)
+                } else {
+                    res = IpcResponse(req_id: req_id, statusCode: 404, body: "no found handler for \(args["pathname"].stringValue)", headers: headers)
+                }
+//            } catch let err {
+//                res = IpcResponse(req_id: req_id, statusCode: 500, body: "\(err)", headers: headers)
+//            }
+            
+            self.portPostMessage(res: res)
         } else if(message.name == "logging") {
             print(message.body)
+        } else if(message.name == "portForward") {
+            print("portForward")
+            guard let data = message.body as? [String:Any], let process_id = data["process_id"] as? Int else { return }
+            
+            let port1 = "\(process_id)_port1"
+            let port2 = "\(process_id)_port2"
+            let ipc = JsIpc(port1: port1, port2: port2)
+            self.all_ipc_cache[process_id] = ipc
         }
     }
 }
-
-
+                    
+                    

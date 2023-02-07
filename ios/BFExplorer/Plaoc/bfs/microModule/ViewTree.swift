@@ -35,6 +35,7 @@ class ViewTree {
 
     func appendTo(webviewNode: WebviewNode) {
         children.append(webviewNode)
+        currentProcessId = webviewNode.id
     }
 }
 

@@ -982,10 +982,10 @@
 				F3A74E8B2987BA99008614BD /* NativeMicroModule.swift */,
 				F3A74E9529890C58008614BD /* BootNMM.swift */,
 				F3A74E9729890C7E008614BD /* MultiWebViewNMM.swift */,
-				F3A74E912988E7EA008614BD /* JsMicroModule.swift */,
 				F3A74E872987B505008614BD /* DnsNMM.swift */,
-				F3A74E892987B68C008614BD /* DwebModel.swift */,
+				F3A74E912988E7EA008614BD /* JsMicroModule.swift */,
 				F3A74EAD298BC21D008614BD /* JsProcessNMM.swift */,
+				F3A74E892987B68C008614BD /* DwebModel.swift */,
 				F3A74E8F2987C581008614BD /* ViewTree.swift */,
 			);
 			path = microModule;

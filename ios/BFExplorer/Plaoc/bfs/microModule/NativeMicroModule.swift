@@ -18,46 +18,50 @@ class NativeMicroModule: MicroModule {
     typealias IpcCb = (NativeIpc) -> Any
     typealias IpcVoid = () -> Void
     
-    override var mmid: MMID {
-        get {
-            ".sys.dweb"
-        }
-        set {
-            ".sys.dweb"
-        }
-    }
     private var _connectting_ipcs: Set<NativeIpc> = []
     internal var Routers: [String:(Any) -> Any?] = [:]
     
-    func _connect() -> NativeIpc {
+    override init(mmid: MMID = ".sys.dweb") {
+        super.init()
+        self.mmid = mmid
+    }
+    
+    override func _bootstrap() -> Any {
+        if mmid == "desktop.sys.dweb" {
+            guard let app = UIApplication.shared.delegate as? AppDelegate else { return false }
+            
+            app.window = UIWindow(frame: UIScreen.main.bounds)
+            app.window?.makeKeyAndVisible()
+            app.window?.rootViewController = UINavigationController(rootViewController: BrowserContainerViewController())
+        }
+        return true
+    }
+    
+    override func _connect(from: MicroModule) throws -> NativeIpc? {
         let timestamp = Date().milliStamp
-        let port1 = "\(timestamp)_1"
-        let port2 = "\(timestamp)_2"
+        let port1 = "\(timestamp)_port1"
+        let port2 = "\(timestamp)_port2"
         let inner_ipc = NativeIpc(port1: port2, port2: port1)
         
         _connectting_ipcs.insert(inner_ipc)
-        inner_ipc.onClose(cb: {
+        inner_ipc.onClose {
             self._connectting_ipcs.remove(inner_ipc)
-        })()
+        }
         
         _emitConnect(ipc:inner_ipc)
         
         return NativeIpc(port1: port1, port2: port2)
     }
     
-    internal var _on_connect_cbs: [Int:IpcCb] = [:]
-    internal func onConnect(cb: @escaping IpcCb) -> IpcVoid {
-        let timestamp = Date().milliStamp
-        _on_connect_cbs[timestamp] = cb
-        
-        return {
-            self._on_connect_cbs.removeValue(forKey: timestamp)
-        }
+    internal var _on_connect_cbs: Set<IpcClosure<IpcCb>> = []
+    func onConnect(cb: @escaping IpcCb) {
+        self._on_connect_cbs.insert(IpcClosure(timestamp: Date().milliStamp, closure: cb))
     }
     
     internal func _emitConnect(ipc: NativeIpc) {
-        for (_, cb) in _on_connect_cbs {
-            cb(ipc)
+        for cb in _on_connect_cbs {
+            cb.closure(ipc)
+            _on_connect_cbs.remove(cb)
         }
     }
     
@@ -71,37 +75,34 @@ class NativeMicroModule: MicroModule {
         _connectting_ipcs.removeAll()
     }
     
-    internal func registerCommonIpcOnMessageHandler(commonHandlerSchema: RequestCommonHandlerSchema) -> () -> Void {
+    internal func registerCommonIpcOnMessageHandler(commonHandlerSchema: RequestCommonHandlerSchema) {
         _initCommonIpcOnMessage()
-        var handlers = _common_ipc_on_message_handlers
         let custom_handler_schema: RequestCustomHandlerSchema = RequestCustomHandlerSchema(pathname: commonHandlerSchema.pathname, matchMode: commonHandlerSchema.matchMode, input: self.deserializeRequestToParams(schema: commonHandlerSchema.input), output: self.serializeResultToResponse(schema: commonHandlerSchema.output), handler: commonHandlerSchema.handler)
-        
-        handlers.insert(custom_handler_schema)
-        
-        return {
-            handlers.remove(custom_handler_schema)
-        }
+
+        _common_ipc_on_message_handlers.insert(custom_handler_schema)
     }
     
-    private var _common_ipc_on_message_handlers: Set<RequestCustomHandlerSchema> = []
+    var _common_ipc_on_message_handlers: Set<RequestCustomHandlerSchema> = []
     private var _inited_common_ipc_on_message = false
-    private func _initCommonIpcOnMessage() {
+    func _initCommonIpcOnMessage() {
         if _inited_common_ipc_on_message {
             return
         }
         
         _inited_common_ipc_on_message = true
         
-        onConnect { ipc in
-            ipc.onMessage { request in
-                guard let req = request as? IpcRequest else { return false }
+        onConnect { ipc -> Void in
+            print("11111 ipc")
+            print(ipc)
+            ipc.onMessage { request -> Void in
+                guard let req = request as? IpcRequest else { return }
                 
                 if req.type != IPC_DATA_TYPE.request {
-                    return false
+                    return
                 }
                 
                 let pathnames = req.parsed_url?.pathComponents
-                guard let pathname = pathnames?.joined(separator: "") else { return false }
+                guard let pathname = pathnames?.joined(separator: "") else { return }
                 
                 var res: IpcResponse?
                 
@@ -126,6 +127,8 @@ class NativeMicroModule: MicroModule {
                             res = IpcResponse(req_id: req.req_id, statusCode: 500, body: body, headers: ["Content-Type":"text/plain"])
                         }
                     }
+                    
+                    self._common_ipc_on_message_handlers.remove(handler_schema)
                 }
                 
                 if res == nil {
@@ -133,9 +136,8 @@ class NativeMicroModule: MicroModule {
                 }
                 
                 ipc.postMessage(data: res!)
-                return true
-            }()
-        }()
+            }
+        }
     }
 }
 

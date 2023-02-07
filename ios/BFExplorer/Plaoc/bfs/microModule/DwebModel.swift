@@ -44,7 +44,7 @@ struct IpcRequest {
     func toDic() -> [String:Any] {
         var params: [String:Any] = [:]
         
-        params["type"] = IPC_DATA_TYPE.request
+        params["type"] = 0
         params["req_id"] = req_id
         params["method"] = method
         params["url"] = url
@@ -65,7 +65,7 @@ struct IpcResponse {
     func toDic() -> [String:Any] {
         var params: [String:Any] = [:]
         
-        params["type"] = IPC_DATA_TYPE.response
+        params["type"] = 1
         params["req_id"] = req_id
         params["statusCode"] = statusCode
         params["body"] = body
@@ -81,8 +81,6 @@ protocol IpcIntersectionType {
 extension IpcRequest: IpcIntersectionType {}
 extension IpcResponse: IpcIntersectionType {}
 
-
-
 typealias IpcCb = (IpcIntersectionType) -> Any
 typealias IpcCloseCb = () -> Any
 typealias IpcVoid = () -> Void
@@ -91,14 +89,28 @@ protocol Ipc: Hashable {
     var port1: String { get }
     var port2: String { get }
     func postMessage(data: IpcIntersectionType) -> Void
-    func onMessage(cb: @escaping IpcCb) -> IpcVoid
+    func onMessage(cb: @escaping IpcCb) -> Void
     func close() -> Void
-    func onClose(cb: @escaping IpcCloseCb) -> IpcVoid
+    func onClose(cb: @escaping IpcCloseCb) -> Void
 }
 
+struct IpcClosure<C>: Hashable {
+    var timestamp: Int
+    var closure: C
+    
+    static func == (lhs: IpcClosure, rhs: IpcClosure) -> Bool {
+        return lhs.timestamp == rhs.timestamp
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(timestamp)
+    }
+}
+
+
 class NativeIpc: Ipc {
-    var port1: String
-    var port2: String
+    internal var port1: String
+    internal var port2: String
     private var publisher: NotificationCenter.Publisher
     private var cancelIpc: AnyCancellable?
     
@@ -128,14 +140,14 @@ class NativeIpc: Ipc {
                 }
                 
                 if message != nil {
-                    for (_, cb) in self._cbs {
-                        cb(message!)
+                    for cb in self._cbs {
+                        cb.closure(message!)
+                        self._cbs.remove(cb)
                     }
                 }
             }
         }
     }
-    
     
     func postMessage(data: IpcIntersectionType) {
         if _closed {
@@ -145,14 +157,9 @@ class NativeIpc: Ipc {
         NotificationCenter.default.post(name: Notification.Name(port2), object: nil, userInfo: ["status": IPC_STATUS.connect, "data": data.toDic()])
     }
     
-    private var _cbs: [Int:IpcCb] = [:]
-    func onMessage(cb: @escaping IpcCb) -> IpcVoid {
-        let timestamp = Date().milliStamp
-        _cbs[timestamp] = cb
-        
-        return {
-            self._cbs.removeValue(forKey: timestamp)
-        }
+    var _cbs: Set<IpcClosure<IpcCb>> = []
+    func onMessage(cb: @escaping IpcCb) {
+        self._cbs.insert(IpcClosure(timestamp: Date().milliStamp, closure: cb))
     }
     
     private var _closed = false
@@ -168,19 +175,15 @@ class NativeIpc: Ipc {
             cancelIpc!.cancel()
         }
         
-        for (_, cb) in _onclose_cbs {
-            cb()
+        for cb in _onclose_cbs {
+            cb.closure()
+            _onclose_cbs.remove(cb)
         }
     }
     
-    private var _onclose_cbs: [Int:IpcCloseCb] = [:]
-    func onClose(cb: @escaping IpcCloseCb) -> IpcVoid {
-        let timestamp = Date().milliStamp
-        _onclose_cbs[timestamp] = cb
-        
-        return {
-            self._onclose_cbs.removeValue(forKey: timestamp)
-        }
+    var _onclose_cbs: Set<IpcClosure<IpcCloseCb>> = []
+    func onClose(cb: @escaping IpcCloseCb) {
+        self._onclose_cbs.insert(IpcClosure(timestamp: Date().milliStamp, closure: cb))
     }
     
     static func == (lhs: NativeIpc, rhs: NativeIpc) -> Bool {
@@ -194,4 +197,4 @@ extension NativeIpc: Hashable {
     }
 }
 
-
+class JsIpc: NativeIpc {}

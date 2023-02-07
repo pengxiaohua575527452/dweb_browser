@@ -9,25 +9,21 @@ import Foundation
 
 class DnsNMM: NativeMicroModule {
     static let shared = DnsNMM()
-    override var mmid: MMID {
-        get {
-            "dns.sys.dweb"
-        }
-        set {
-            "dns.sys.dweb"
-        }
-    }
+    
     var apps: [MMID: MicroModule] = [:]
     
-    override init() {
-        super.init()
-        self.install(mm: BootNMM())
-        self.install(mm: MultiWebViewNMM())
-        self.install(mm: JsProcessNMM())
+    private var bootNMM = BootNMM(mmid: "boot.sys.dweb")
+    private var multiWebViewNMM = MultiWebViewNMM(mmid: "mwebview.sys.dweb")
+    var jsProcessNMM = JsProcessNMM()
+    override init(mmid:MMID = "dns.sys.dweb") {
+        super.init(mmid:mmid)
+        self.install(mm: bootNMM)
+        self.install(mm: multiWebViewNMM)
+        self.install(mm: jsProcessNMM)
+        print(apps)
         
         // 注册桌面
-//        let desktopJmm = JsMicroModule(mmid: "desktop.sys.dweb", metadata: Metadata(main_url: "https://objectjson.waterbang.top/desktop.worker.js"))
-        let desktopJmm = JsMicroModule(mmid: "desktop.sys.dweb", metadata: Metadata(main_url: "/app/injectWebView/desktop.worker.js"))
+        let desktopJmm = NativeMicroModule(mmid: "desktop.sys.dweb")
         print("desktopJmm")
         self.install(mm: desktopJmm)
     }
@@ -40,34 +36,24 @@ class DnsNMM: NativeMicroModule {
         Routers["/install-js"] = { _ in
             return
         }
-//        Routers["/open"] = { args in
-//            guard let args = args as? [String:MMID] else { return false }
-//            
-//            if args["app_id"] != nil {
-//                self.open(mmid: args["app_id"]!)
-//            }
-//            
-//            return true
-//        }
-        Routers["/close"] = { args in
-            guard let args = args as? [String:MMID] else { return false }
-            
-            if args["app_id"] != nil {
-                self.close(mmid: args["app_id"]!)
-            }
-            
-            return true
-        }
-        
-        self.registerCommonIpcOnMessageHandler(commonHandlerSchema: RequestCommonHandlerSchema(pathname: "/open", matchMode: MatchMode.full, input: ["app_id":"mmid"], output: "boolean") { args, _ in
+        Routers["/open"] = { args in
             guard let args = args as? [String:MMID] else { return false }
             
             if args["app_id"] != nil {
                 self.open(mmid: args["app_id"]!)
             }
-            
+
             return true
-        })()
+        }
+        Routers["/close"] = { args in
+            guard let args = args as? [String:MMID] else { return false }
+
+            if args["app_id"] != nil {
+                self.close(mmid: args["app_id"]!)
+            }
+
+            return true
+        }
         
         return open(mmid: "boot.sys.dweb")
     }
@@ -121,8 +107,9 @@ class DnsNMM: NativeMicroModule {
         }
     }
     
+    private var connects: [MicroModule: [MMID:NativeIpc]] = [:]
     // 原生fetch
-    func nativeFetch(urlString: String) -> Any? {
+    func nativeFetch(urlString: String, microModule: MicroModule?) -> Any? {
         print(urlString)
         guard let url = URL(string: urlString) else { return nil }
         
@@ -153,10 +140,47 @@ class DnsNMM: NativeMicroModule {
                 mmid = url.host!
             }
             
+            if microModule != nil {
+                var from_app_ipcs = connects[microModule!]
+                if from_app_ipcs == nil {
+                    from_app_ipcs = [:]
+                    connects[microModule!] = from_app_ipcs
+                }
+                
+                let ipc = from_app_ipcs![mmid]
+                if ipc == nil {
+                    do {
+                        let app = self.open(mmid: mmid)
+                        if let app = app as? JsMicroModule {
+                            let ipc = try app.connect(from: microModule!)
+                            ipc?.onClose {
+//                                from_app_ipcs?.removeValue(forKey: mmid)!
+                                self.connects[microModule!]?.removeValue(forKey: mmid)
+                            }
+                            from_app_ipcs![mmid] = ipc as? JsIpc
+                            connects[microModule!] = from_app_ipcs
+                        } else {
+                            let ipc = try app?.connect(from: microModule!)
+                            ipc?.onClose {
+//                                from_app_ipcs?.removeValue(forKey: mmid)!
+                                self.connects[microModule!]?.removeValue(forKey: mmid)
+                            }
+                            from_app_ipcs![mmid] = ipc as? NativeIpc
+                            connects[microModule!] = from_app_ipcs
+                        }
+                    } catch {
+    //                    throw MicroModuleError.moduleError("DnsNMM nativeFetch error: \(error)")
+                        print("DnsNMM nativeFetch error: \(error)")
+                    }
+                }
+            }
+            print(connects)
+            
             guard let mm = DnsNMM.shared.apps[mmid] as? NativeMicroModule else { return nil }
             
             for key in mm.Routers.keys {
                 if pathname.hasPrefix(key) {
+                    mm._initCommonIpcOnMessage()
                     return mm.Routers[key]!(args)
                 }
             }

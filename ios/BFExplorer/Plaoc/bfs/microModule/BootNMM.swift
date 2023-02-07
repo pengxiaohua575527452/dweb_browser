@@ -8,28 +8,19 @@
 import UIKit
 
 class BootNMM: NativeMicroModule {
-    override var mmid: MMID {
-        get {
-            "boot.sys.dweb"
-        }
-        set {
-            "boot.sys.dweb"
-        }
-    }
-    
     var registeredMmids: Set<String> = ["desktop.sys.dweb"]
     
 //    private var Routers: [String:(Any) -> Any] = [:]
     override func _bootstrap() -> Any {
         for mmid in registeredMmids {
-            DnsNMM.shared.nativeFetch(urlString: "file://dns.sys.dweb/open?app_id=\(mmid)")
+            DnsNMM.shared.nativeFetch(urlString: "file://dns.sys.dweb/open?app_id=\(mmid)", microModule: self)
         }
         
         return true
     }
     
-    override init() {
-        super.init()
+    override init(mmid:MMID = "boot.sys.dweb") {
+        super.init(mmid:mmid)
         
         Routers["/register"] = { args in
             guard let args = args as? [String:MMID] else { return false }

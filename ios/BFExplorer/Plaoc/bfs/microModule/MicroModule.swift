@@ -9,15 +9,12 @@ import Foundation
 
 /** 微组件抽象类 */
 class MicroModule: NSObject {
-    var mmid: MMID {
-        get {
-            ".dweb"
-        }
-        set {
-            ".dweb"
-        }
-    }
+    var mmid: MMID
     var running = false
+    
+    init(mmid: MMID = ".dweb") {
+        self.mmid = mmid
+    }
 
     internal func before_bootstrap() throws {
         if running {
@@ -65,13 +62,14 @@ class MicroModule: NSObject {
         }
     }
 
-    func _connect(from: MicroModule) -> NativeIpc {
-        return NativeIpc(port1: "port1", port2: "port2")
+    func _connect(from: MicroModule) throws -> NativeIpc? {
+        return nil
     }
+    
     func connect(from: MicroModule) throws -> NativeIpc? {
         if !running {
             throw MicroModuleError.moduleError("module no running")
         }
-        return _connect(from: from)
+        return try _connect(from: from)
     }
 }

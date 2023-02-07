@@ -13,16 +13,8 @@ struct Metadata {
 
 /** 可动态加载的微组件 */
 class JsMicroModule: MicroModule {
-    override var mmid: MMID {
-        get {
-            return _mmid
-        }
-        set {
-            _mmid = newValue
-        }
-    }
-    var _mmid: MMID = ""
     var metadata: Metadata
+    var process_id: Int?
 
     override func _bootstrap() -> Any {
         do {
@@ -38,7 +30,7 @@ class JsMicroModule: MicroModule {
             }
             
             let content = try String(contentsOf: url!, encoding: .utf8)
-            let process_id = DnsNMM.shared.nativeFetch(urlString: "file://js.sys.dweb/create-process?main_code=\(content.encodeURIComponent())")
+            process_id = DnsNMM.shared.nativeFetch(urlString: "file://js.sys.dweb/create-process?main_code=\(content.encodeURIComponent())", microModule: self) as? Int
             print("JsMicroModule process_id: \(process_id)")
         } catch {
             print("JsMicroModule url parse content error: \(error)")
@@ -47,12 +39,21 @@ class JsMicroModule: MicroModule {
         return true
     }
     
+    override func _connect(from: MicroModule) throws -> JsIpc {
+        if process_id == nil {
+            print("process_id no found")
+            throw MicroModuleError.moduleError("module \(from.mmid) process_id no found")
+        }
+        
+        let _ = DnsNMM.shared.nativeFetch(urlString: "file://js.sys.dweb/create-ipc?process_id=\(process_id!)", microModule: self)
+        let ipc = JsIpc(port1: "\(process_id!)_port2", port2: "\(process_id!)_port1")
+        return ipc
+    }
+    
     init(mmid: MMID, metadata: Metadata) {
         self.metadata = metadata
         super.init()
         self.mmid = mmid
     }
-    
-    
 }
 

@@ -106,19 +106,24 @@ class BottomView: UIView {
                     let color = model.colors?.iconColor ?? ""
                     let selectedColor = model.colors?.iconColorSelected ?? ""
                     
-                    if !color.isEmpty {
-                        button.setImage(UIImage.svgImage(withContentsOfFile: imagePath, size: CGSize(width: image_width, height: image_width)), for: .normal)
-                    }
-                    if !selectedColor.isEmpty {
-                        button.setImage(UIImage.svgImage(withContentsOfFile: imagePath, size: CGSize(width: image_width, height: image_width)), for: .selected)
-                    }
+//                    if !color.isEmpty {
+//                        button.setImage(UIImage.svgImage(withContentsOfFile: imagePath, size: CGSize(width: image_width, height: image_width)), for: .normal)
+//                    }
+//                    if !selectedColor.isEmpty {
+//                        button.setImage(UIImage.svgImage(withContentsOfFile: imagePath, size: CGSize(width: image_width, height: image_width)), for: .selected)
+//                    }olor.isEmpty {
+//                        button.setImage(UIImage.svgImage(withContentsOfFile: imagePath, size: CGSize(width: image_width, height: image_width)), for: .normal)
+//                    }
+//                    if !selectedColor.isEmpty {
+//                        button.setImage(UIImage.svgImage(withContentsOfFile: imagePath, size: CGSize(width: image_width, height: image_width)), for: .selected)
+//                    }
                 } else {
-                    button.setImage(UIImage.svgImage(withURL: imagePath, size: CGSize(width: image_width, height: image_width)), for: .normal)
+//                    button.setImage(UIImage.svgImage(withURL: imagePath, size: CGSize(width: image_width, height: image_width)), for: .normal)
                 }
             }
         }
         
-        button.imagePosition(style: .top, spacing: 8)
+//        button.imagePosition(style: .top, spacing: 8)
     }
     
     @objc private func clickAction(sender: UIButton) {

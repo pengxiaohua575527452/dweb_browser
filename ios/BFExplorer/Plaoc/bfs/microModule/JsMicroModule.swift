@@ -31,7 +31,7 @@ class JsMicroModule: MicroModule {
             
             let content = try String(contentsOf: url!, encoding: .utf8)
             process_id = DnsNMM.shared.nativeFetch(urlString: "file://js.sys.dweb/create-process?main_code=\(content.encodeURIComponent())", microModule: self) as? Int
-            print("JsMicroModule process_id: \(process_id)")
+            print("JsMicroModule process_id: \(process_id!)")
         } catch {
             print("JsMicroModule url parse content error: \(error)")
         }

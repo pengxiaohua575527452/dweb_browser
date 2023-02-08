@@ -235,15 +235,6 @@ var NativeIpc = class extends Ipc {
 
 // src/sys/js-process.worker.cts
 var installEnv = async () => {
-  const port_po = new PromiseOut();
-  self.addEventListener('message', (event) => {
-    if (Array.isArray(event.data) && event.data[0] === 'fetch-ipc-channel') {
-//      self.dispatchEvent(new MessageEvent('connect', { data: ipc }));
-      port_po.resolve(event.data[1]);
-    }
-  });
-  
-  
   const reqresMap = /* @__PURE__ */ new Map();
   let req_id = 0;
   const allocReqId = () => req_id++;
@@ -259,19 +250,20 @@ var installEnv = async () => {
         const req_id2 = allocReqId();
         const response_po = new PromiseOut();
         reqresMap.set(req_id2, response_po);
-          const port2 = await port_po.promise;
-          const fetchIpc = new NativeIpc(port2);
-          fetchIpc.onMessage((message) => {
-            let messageJson = JSON.parse(message);
-            if (messageJson.type === 1 /* RESPONSE */) {
-              const res_po = reqresMap.get(messageJson.req_id);
-              if (res_po !== void 0) {
-                reqresMap.delete(messageJson.req_id);
-                res_po.resolve(messageJson);
-              }
+      self.addEventListener('message', (event) => {
+        if (Array.isArray(event.data) && event.data[0] === 'ipc-response') {
+    //      self.dispatchEvent(new MessageEvent('connect', { data: ipc }));
+          const message = event.data[1];
+            if (message.type === 1 /* RESPONSE */) {
+            const res_po = reqresMap.get(message.req_id);
+            if (res_po !== void 0) {
+               reqresMap.delete(message.req_id);
+               res_po.resolve(message);
             }
-          });
-        fetchIpc.postMessage(
+          }
+        }
+      });
+        self.postMessage(
           new IpcRequest(req_id2, method, parsed_url.href, body, headers)
         );
         const ipc_response = await response_po.promise;

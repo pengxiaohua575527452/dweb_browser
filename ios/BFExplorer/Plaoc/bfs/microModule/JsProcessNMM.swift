@@ -26,7 +26,6 @@ class JsProcessNMM: NativeMicroModule {
         config.userContentController.add(LeadScriptHandle(messageHandle: self), name: "logging")
         config.userContentController.add(LeadScriptHandle(messageHandle: self), name: "portForward")
         let webview = WKWebView(frame: .zero, configuration: config)
-        webview.evaluateJavaScript("const reqidPortMap = new Map(); const processPortMap = new Map();")
         return webview
     }()
     
@@ -44,11 +43,16 @@ class JsProcessNMM: NativeMicroModule {
                 return nil
             }
             
-            let timestamp = Date().milliStamp
-            self.hookJavascriptWorker(timestamp: timestamp, main_code: args["main_code"]!)
+            let process_id = self.acc_process_id++
             
-            self.acc_process_id = timestamp
-            return timestamp
+            // 必须要为每个js空间注册，否则无法使用
+            self.webview.configuration.userContentController.add(LeadScriptHandle(messageHandle: self), contentWorld: WKContentWorld.world(name: String(process_id)), name: "webworkerOnmessage")
+            self.webview.configuration.userContentController.add(LeadScriptHandle(messageHandle: self), contentWorld: WKContentWorld.world(name: String(process_id)), name: "logging")
+            self.webview.configuration.userContentController.add(LeadScriptHandle(messageHandle: self), contentWorld: WKContentWorld.world(name: String(process_id)), name: "portForward")
+            
+            self.hookJavascriptWorker(process_id: process_id, main_code: args["main_code"]!)
+            
+            return process_id
         }
         Routers["/create-ipc"] = { args in
             guard let args = args as? [String:Int], let process_id = args["worker_id"] as? Int else { return nil }
@@ -58,21 +62,32 @@ class JsProcessNMM: NativeMicroModule {
                 return nil
             }
             
-            DispatchQueue.main.async {
-                self.webview.evaluateJavaScript("""
-                    const port1 = processPortMap.get(\(process_id));
-                    port1.onmessage = (evt) => {
-                        evt.data['process_id'] = \(process_id);
-                        window.webkit.messageHandlers.portForward.postMessage(evt.data);
-                    }
-                """)
-            }
+            let text = #"""
+                port1.onmessage = (evt) => {
+                    evt.data["process_id"] = \(process_id);
+                    window.webkit.messageHandlers.portForward.postMessage(evt.data);
+                }
+            """#
+            self.evaluateJavaScript(text: text, process_id: process_id)
             
             return process_id
         }
     }
     
-    func hookJavascriptWorker(timestamp: Int, main_code: String) {
+    func evaluateJavaScript(text: String, process_id: Int) {
+        DispatchQueue.main.async {
+            self.webview.evaluateJavaScript(text, in: nil, in: WKContentWorld.world(name: String(process_id))) { result in
+                switch result {
+                case .success(let suc):
+                    print("suc: \(suc)")
+                case .failure(let err):
+                    print(err.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    func hookJavascriptWorker(process_id: Int, main_code: String) {
         DispatchQueue.global().async {
             do {
                 let injectWorkerDir = URL(fileURLWithPath: Bundle.main.bundlePath + "/app/injectWebView/worker.js")
@@ -83,53 +98,37 @@ class JsProcessNMM: NativeMicroModule {
                  \(main_code)
                 """
                 
-                DispatchQueue.main.async {
-                    let text = """
-                        window.webkit.messageHandlers.logging.postMessage('xxxxxxxx');
-                        try {
-                            let webworker_\(timestamp) = new Worker(`\(workerCode)`);
-                            const {port1, port2} = new MessageChannel();
-                            webworker_\(timestamp).postMessage(['fetch-ipc-channel', port2], [port2]);
-                            processPortMap.set(\(timestamp), port1);
-                        
-                            port1.onmessage = (evt) => {
-                                if(evt.data && Object.keys(evt.data).includes('req_id')) {
-                                    reqidPortMap.set(evt.data.req_id, [\(timestamp), port1]);
-                                }
-                                evt.data['process_id'] = \(timestamp);
-                                window.webkit.messageHandlers.webworkerOnmessage.postMessage(JSON.stringify(evt.data));
-                            }
-                        } catch(e) {
-                            window.webkit.messageHandlers.logging.postMessage('error');
-                            window.webkit.messageHandlers.logging.postMessage(e.message);
+                let text = """
+                    window.webkit.messageHandlers.logging.postMessage('xxxxxxxx');
+                    const webworker = new Worker(`\(workerCode)`);
+                    try {
+                        webworker.onmessage = (evt) => {
+                            evt.data['process_id'] = \(process_id);
+                            window.webkit.messageHandlers.webworkerOnmessage.postMessage(JSON.stringify(evt.data));
                         }
-                        ''
-                    """
-                    self.webview.evaluateJavaScript(text) {(result, error) in
-                        if error != nil {
-                            print(error.debugDescription)
-                        }
+                    } catch(e) {
+                        window.webkit.messageHandlers.logging.postMessage('error');
+                        window.webkit.messageHandlers.logging.postMessage(e.message);
                     }
-                }
+                    ''
+                """
+                self.evaluateJavaScript(text: text, process_id: process_id)
             } catch {
                 print("JsProcessNMM hookJavascriptWorker error: \(error)")
             }
         }
     }
     
-    func portPostMessage(res: IpcResponse) {
+    // ipc请求数据响应内容返回
+    func ipcResponseMessage(res: IpcResponse, process_id: Int) {
         print(res.toDic())
         let resStr = ChangeTools.dicValueString(res.toDic())
-        self.webview.evaluateJavaScript("""
-            window.webkit.messageHandlers.logging.postMessage('req_id: '+\(res.req_id));
-            window.webkit.messageHandlers.logging.postMessage('reqidPortMap: '+reqidPortMap.size);
-            const [_, port1] = reqidPortMap.get(\(res.req_id));
-            port1.postMessage(\(resStr);
-            reqidPortMap.delete(\(res.req_id));
-            window.webkit.messageHandlers.logging.postMessage('reqidPortMap: '+reqidPortMap.size);
-        """) { result, error in
-            print(error)
-        }
+        let text = """
+            webworker.postMessage(['ipc-response', \(resStr!)], [\(resStr!)]);
+            ''
+        """
+        
+        self.evaluateJavaScript(text: text, process_id: process_id)
     }
 }
 
@@ -165,7 +164,7 @@ extension JsProcessNMM: WKScriptMessageHandler {
 //                res = IpcResponse(req_id: req_id, statusCode: 500, body: "\(err)", headers: headers)
 //            }
             
-            self.portPostMessage(res: res)
+            self.ipcResponseMessage(res: res, process_id: process_id)
         } else if(message.name == "logging") {
             print(message.body)
         } else if(message.name == "portForward") {

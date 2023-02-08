@@ -142,6 +142,8 @@ class BrowserContainerViewController: UIViewController,  OverlayShareViewDelegat
                 let type = sharedAppInfoMgr.systemAPPType(appId: appId)
                 
                 self.navigationController?.pushViewController(webVC, animated: true)
+            } else if let vc = notify.object as? WebViewViewController {
+                self.navigationController?.pushViewController(vc, animated: true)
             }
         }
         

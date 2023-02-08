@@ -212,6 +212,9 @@ extension CustomWebView: UIDocumentPickerDelegate {
 extension CustomWebView: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        print("navigationAction")
+        print(navigationAction.request.httpBody)
+        navigationAction.request.httpBodyStream
         
         decisionHandler(.allow)
     }

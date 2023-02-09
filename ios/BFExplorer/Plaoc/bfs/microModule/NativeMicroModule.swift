@@ -92,8 +92,6 @@ class NativeMicroModule: MicroModule {
         _inited_common_ipc_on_message = true
         
         onConnect { ipc -> Void in
-            print("11111 ipc")
-            print(ipc)
             ipc.onMessage { request -> Void in
                 guard let req = request as? IpcRequest else { return }
                 

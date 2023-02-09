@@ -202,6 +202,8 @@
 		F39A87172970F53E00CC7126 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39A87162970F53E00CC7126 /* CameraManager.swift */; };
 		F39A87192970F88C00CC7126 /* CameraExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39A87182970F88C00CC7126 /* CameraExtensions.swift */; };
 		F39A871D2971312300CC7126 /* ImageSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39A871C2971312300CC7126 /* ImageSaver.swift */; };
+		F39F45A22994D3D500F7967F /* HTTPServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39F45A12994D3D500F7967F /* HTTPServerManager.swift */; };
+		F39F45A62994DD9000F7967F /* Web in Resources */ = {isa = PBXBuildFile; fileRef = F39F45A52994DD9000F7967F /* Web */; };
 		F3A74E882987B505008614BD /* DnsNMM.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74E872987B505008614BD /* DnsNMM.swift */; };
 		F3A74E8A2987B68C008614BD /* DwebModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74E892987B68C008614BD /* DwebModel.swift */; };
 		F3A74E8C2987BA99008614BD /* NativeMicroModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74E8B2987BA99008614BD /* NativeMicroModule.swift */; };
@@ -426,6 +428,8 @@
 		F39A87162970F53E00CC7126 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		F39A87182970F88C00CC7126 /* CameraExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraExtensions.swift; sourceTree = "<group>"; };
 		F39A871C2971312300CC7126 /* ImageSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSaver.swift; sourceTree = "<group>"; };
+		F39F45A12994D3D500F7967F /* HTTPServerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPServerManager.swift; sourceTree = "<group>"; };
+		F39F45A52994DD9000F7967F /* Web */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Web; sourceTree = "<group>"; };
 		F3A74E872987B505008614BD /* DnsNMM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DnsNMM.swift; sourceTree = "<group>"; };
 		F3A74E892987B68C008614BD /* DwebModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DwebModel.swift; sourceTree = "<group>"; };
 		F3A74E8B2987BA99008614BD /* NativeMicroModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeMicroModule.swift; sourceTree = "<group>"; };
@@ -695,6 +699,7 @@
 		F05C41F42907F0E30082CC75 /* Plaoc */ = {
 			isa = PBXGroup;
 			children = (
+				F39F45A02994D3B700F7967F /* HTTPServer */,
 				F3A74E862987B4F1008614BD /* bfs */,
 				F0292D832975502700C2E464 /* PhotoHandle */,
 				F33BE3CC2966DE1B006D30B9 /* app */,
@@ -967,6 +972,15 @@
 			path = camera;
 			sourceTree = "<group>";
 		};
+		F39F45A02994D3B700F7967F /* HTTPServer */ = {
+			isa = PBXGroup;
+			children = (
+				F39F45A52994DD9000F7967F /* Web */,
+				F39F45A12994D3D500F7967F /* HTTPServerManager.swift */,
+			);
+			path = HTTPServer;
+			sourceTree = "<group>";
+		};
 		F3A74E862987B4F1008614BD /* bfs */ = {
 			isa = PBXGroup;
 			children = (
@@ -1064,6 +1078,7 @@
 				F0E4B66A29713E78005ECC4C /* guid in Resources */,
 				F01ABAEB28D2C7AC0038AF9C /* SourceHanSansCN-ExtraLight.otf in Resources */,
 				F01ABAEF28D2C9650038AF9C /* SourceHanSansCN-Medium.ttf in Resources */,
+				F39F45A62994DD9000F7967F /* Web in Resources */,
 				F01ABAE828D2C7AC0038AF9C /* SourceHanSansCN-Light.otf in Resources */,
 				F01ABAEA28D2C7AC0038AF9C /* SourceHanSansCN-Heavy.otf in Resources */,
 				F01ABAE728D2C7AC0038AF9C /* SourceHanSansCN-Bold.otf in Resources */,
@@ -1240,6 +1255,7 @@
 				F091CB902951B91900FCE565 /* PhotoManager.swift in Sources */,
 				F39A8713297013CB00CC7126 /* CameraType.swift in Sources */,
 				F091CB392951B8EE00FCE565 /* ScanNetAnimationImageView.swift in Sources */,
+				F39F45A22994D3D500F7967F /* HTTPServerManager.swift in Sources */,
 				19128CE526FC0BCE0057E46D /* BrowserTabHomeView.swift in Sources */,
 				F091CBCB2951B93B00FCE565 /* Schemehandler.swift in Sources */,
 				F0292D9B2975502700C2E464 /* LBXScanViewStyle.swift in Sources */,

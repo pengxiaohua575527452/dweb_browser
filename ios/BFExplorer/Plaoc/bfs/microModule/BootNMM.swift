@@ -5,8 +5,6 @@
 //  Created by kingsword09 on 2023/1/31.
 //
 
-import UIKit
-
 class BootNMM: NativeMicroModule {
     var registeredMmids: Set<String> = ["desktop.sys.dweb"]
     

@@ -11,22 +11,7 @@ import Foundation
 
 class JsProcessNMM: NativeMicroModule {
     private lazy var webview: WKWebView = {
-        let config = WKWebViewConfiguration()
-        
-        config.userContentController = WKUserContentController()
-        let data = try? Data(contentsOf: URL(fileURLWithPath: Bundle.main.bundlePath + "/app/injectWebView/console.js"))
-        if data != nil {
-            if let jsString = String(data: data!, encoding: .utf8) {
-                let script = WKUserScript(source: jsString, injectionTime: .atDocumentStart, forMainFrameOnly: true)
-                config.userContentController.addUserScript(script)
-            }
-        }
-        
-        config.userContentController.add(LeadScriptHandle(messageHandle: self), name: "webworkerOnmessage")
-        config.userContentController.add(LeadScriptHandle(messageHandle: self), name: "logging")
-        config.userContentController.add(LeadScriptHandle(messageHandle: self), name: "portForward")
-        let webview = WKWebView(frame: .zero, configuration: config)
-        return webview
+        return WKWebView(frame: .zero)
     }()
     
     var all_ipc_cache: [Int:NativeIpc] = [:]
@@ -37,7 +22,7 @@ class JsProcessNMM: NativeMicroModule {
         _ = webview
         
         Routers["/create-process"] = { args in
-            guard let args = args as? [String:String] else { return false }
+            guard let args = args as? [String:String] else { return nil }
             
             if args["main_code"] == nil {
                 return nil
@@ -55,7 +40,7 @@ class JsProcessNMM: NativeMicroModule {
             return process_id
         }
         Routers["/create-ipc"] = { args in
-            guard let args = args as? [String:Int], let process_id = args["worker_id"] as? Int else { return nil }
+            guard let args = args as? [String:Int], let process_id = args["worker_id"] else { return nil }
             
             if self.all_ipc_cache.index(forKey: process_id) == nil {
                 print("JsProcessNMM create-ipc no found worker by id '\(process_id)'")

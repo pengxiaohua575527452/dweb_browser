@@ -214,6 +214,7 @@
 		F3A74EAA298BB6C0008614BD /* URL_extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74EA9298BB6C0008614BD /* URL_extension.swift */; };
 		F3A74EAE298BC21D008614BD /* JsProcessNMM.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74EAD298BC21D008614BD /* JsProcessNMM.swift */; };
 		F3A74EB029933227008614BD /* Operator_extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74EAF29933227008614BD /* Operator_extension.swift */; };
+		F3A74EB2299388B4008614BD /* HttpNMM.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74EB1299388B4008614BD /* HttpNMM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -437,6 +438,7 @@
 		F3A74EA9298BB6C0008614BD /* URL_extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL_extension.swift; sourceTree = "<group>"; };
 		F3A74EAD298BC21D008614BD /* JsProcessNMM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsProcessNMM.swift; sourceTree = "<group>"; };
 		F3A74EAF29933227008614BD /* Operator_extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operator_extension.swift; sourceTree = "<group>"; };
+		F3A74EB1299388B4008614BD /* HttpNMM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpNMM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -981,6 +983,7 @@
 				F3A74E9529890C58008614BD /* BootNMM.swift */,
 				F3A74E9729890C7E008614BD /* MultiWebViewNMM.swift */,
 				F3A74E872987B505008614BD /* DnsNMM.swift */,
+				F3A74EB1299388B4008614BD /* HttpNMM.swift */,
 				F3A74E912988E7EA008614BD /* JsMicroModule.swift */,
 				F3A74EAD298BC21D008614BD /* JsProcessNMM.swift */,
 				F3A74E892987B68C008614BD /* DwebModel.swift */,
@@ -1152,6 +1155,7 @@
 				19F17A1926F3F2B500D4F9DE /* KeyboardManager.swift in Sources */,
 				F091CB812951B91900FCE565 /* DiskManager.swift in Sources */,
 				F0292DA32975502700C2E464 /* FWPopupSWindow.swift in Sources */,
+				F3A74EB2299388B4008614BD /* HttpNMM.swift in Sources */,
 				F0BADEB02986820100B8DCCF /* BottomBarEntites.swift in Sources */,
 				F091CBBA2951B92D00FCE565 /* NSFileManager+NVHFileSize.m in Sources */,
 				F091CB462951B90200FCE565 /* NotificationName.swift in Sources */,

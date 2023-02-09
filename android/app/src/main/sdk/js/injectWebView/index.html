@@ -5,13 +5,54 @@
   <title></title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin-top: 100px;
+    }
+
+  </style>
 </head>
 
 <body>
-
+  <input id="post-action" valu="/qaq" />
+  <button id="post-bytes">post bytes</button>
+  <button id="post-stream">post stream</button>
 </body>
 <script>
+  const $postAction = document.querySelector("#post-action");
+  const getPostActionUrl = () =>
+    new URL($postAction.value.trim(), location.href);
+  document.querySelector("#post-bytes").addEventListener("click", () => {
+    const obj = { hello: "world" };
+    const blob = new Blob([JSON.stringify(obj, null, 2)], {
+      type: "application/json",
+    });
 
+    fetch(getPostActionUrl(), {
+      method: "POST",
+      //body: new Uint8Array([1, 2, 3, 4, 5]),
+      body: blob,
+    });
+  });
+  document.querySelector("#post-stream").addEventListener("click", () => {
+    const stream = new ReadableStream({
+      start(controller) {
+        let i = 0;
+        const ti = setInterval(() => {
+          if (i++ < 10) {
+            controller.enqueue(new Uint8Array(i));
+          } else {
+            controller.close();
+            clearInterval(ti);
+          }
+        }, 1000);
+      },
+    });
+    fetch(getPostActionUrl(), {
+      method: "POST",
+      body: stream,
+    });
+  });
   if (navigator.serviceWorker) {
     navigator.serviceWorker.register('/serviceWorker.js').then(function (registration) {
       console.log('service worker 注册成功');

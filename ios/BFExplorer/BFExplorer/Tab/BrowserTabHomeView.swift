@@ -50,8 +50,9 @@ var appNames: [String]?{
 public enum Category: Int {
     case hotSite, bookmark, apps
 }
-
+//在首页面板上显示的
 var onDeckApps = sharedCachesMgr.readAvailableApps()
+//正在下载的
 var downloadingAppIds = [String]()
 
 
@@ -143,7 +144,6 @@ class CategoryView: UIView{
     }
     
     func updateTouches(_ records:[LinkRecord]){
-        
         for index in 0...7{
             if index < 8 {
                 if index < records.count{
@@ -155,7 +155,6 @@ class CategoryView: UIView{
                     }
                 }
             }
-            
             if index == 7 && records.count > 8{
                 clickables?[index].setImage(image: UIImage(named: "ico_home_bookmark")!)
                 clickables?[index].setTitle(text: "更多")
@@ -170,6 +169,9 @@ class CategoryView: UIView{
                 clickables?[index].setImage(image: image)
             }
             clickables?[index].setTitle(text: record.appName)
+        }
+        for i in 0 ..< (clickables?.count ?? 8){
+            clickables?[i].isHidden = i >= records.count
         }
     }
     
@@ -400,74 +402,66 @@ class BrowserTabHomeView: UIView, UIScrollViewDelegate {
         appsContainerView.updateAppContainerView(list)
     }
     
-    func appendTemporaryApp(appId: String){
+    func appendTemporaryApp(animateAppId: String){
         if !onDeckApps.contains(where: { info in
-            info.appId == appId
+            info.appId == animateAppId
         }){
             guard let image = PKImageExtensions.image(with: .cyan,size: CGSize(width: 120, height: 120)) else { return }
-            var appInfo = AppInfo(appName: appId, appId: appId)
+            var appInfo = AppInfo(appName: "临时 App", appId: animateAppId)
             appInfo.appIcon = image
             onDeckApps.append(appInfo)
-            downloadingAppIds.append(appId)
+            downloadingAppIds.append(animateAppId)
             appsContainerView.updateAppContainerView(onDeckApps)
         }
-        
     }
     
-    func updateAppDone(appId: String){
-//        guard let appId = infoDict["appId"] as? String else { return }
-        sharedAppInfoMgr.updateFileType(appId: appId)
-        
+    //整理app的icon，合并并显示小红点（已安装）或者刷新名字图标（第一次安装）
+    func updateAppDone(animateAppId: String){
+        guard let appId = animateAppId.components(separatedBy: appidCutter).first else { return }
+
         guard let index = onDeckApps.firstIndex(where: { info in
-            info.appId == appId
+            info.appId == animateAppId
         })  else {return}
         
         let button = self.appsContainerView.clickables![index]
         button.realImageView.startExpandAnimation()
         button.realImageView.image = sharedAppInfoMgr.currentAppImage(appId: appId)
         button.realTitleLabel.text = sharedAppInfoMgr.currentAppName(appId: appId)
-        if let index = onDeckApps.firstIndex(where: { info in
-            info.appName == appId
-        }){
-            onDeckApps.remove(at: index)
-        }
-        if let index2 = downloadingAppIds .firstIndex(where: { installingId in
-            installingId == appId
-        }){
-            downloadingAppIds.remove(at: index2)
-        }
-        appsContainerView.updateRedSpot()
-    }
-    
-    func installingProgressUpdate(_ notify: Notification){
-        guard let infoDict = notify.userInfo,
-              let progress = infoDict["progress"] as? String else { return }
-        guard let appId = infoDict["appId"] as? String else { return }
-        
-        if !downloadingAppIds.contains(where: { installingAppId in
-            installingAppId == appId
-        }){
-            appendTemporaryApp(appId: appId)
-            operateMonitor.startAnimationMonitor.onNext(appId)
-        }
-        
-        if progress == "complete" {
-            
-            
-        }else if progress == "fail"{
+        //更新安装
+        if animateAppId.contains(appidCutter){
             if let index = onDeckApps.firstIndex(where: { info in
-                info.appName == appId
+                info.appId == animateAppId
             }){
                 onDeckApps.remove(at: index)
             }
-            self.appsContainerView.updateAppContainerView(onDeckApps)
-            
+        }
+        if let index2 = downloadingAppIds.firstIndex(where: { installingId in
+            installingId == animateAppId
+        }){
+            downloadingAppIds.remove(at: index2)
+        }
+        reloadAppContainerView()
+        appsContainerView.updateRedSpot()
+    }
+    //如果是recommand app则直接在app图标上做动画，如果是已安装的应用则需要新创建一个图标做动画
+    func downloadProgressUpdate(_ notify: Notification){
+        guard let infoDict = notify.userInfo,
+              let progress = infoDict["progress"] as? String else { return }
+        guard let animateAppId = infoDict["appId"] as? String else { return }
+        
+       
+        //FIXME: need to remove the animation
+        if progress == "fail"{
+            updateAppDone(animateAppId: animateAppId)
         }else {
+            if downloadingAppIds.firstIndex(of: animateAppId) == nil {
+                appendTemporaryApp(animateAppId: animateAppId)
+                operateMonitor.startAnimationMonitor.onNext(animateAppId)
+            }
             guard var progress = Double(progress) else { return }
             progress = progress < 0.98 ? progress : 0.98
-            
             if let index = onDeckApps.firstIndex(where: { info in
-                info.appId == appId
+                info.appId == animateAppId
             }){
                 let button = self.appsContainerView.clickables![index]
                 button.realImageView.startProgressAnimation(progress: 1.0 - progress)

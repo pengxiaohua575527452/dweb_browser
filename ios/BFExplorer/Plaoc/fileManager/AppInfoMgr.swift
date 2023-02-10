@@ -46,7 +46,7 @@ class AppInfoMgr: NSObject {
             guard let userInfo = notification.userInfo as? [String:Any],
                   let appId = userInfo["appId"] as? String,
                   let downloadPath = userInfo["tempZipPath"] as? String else { return }
-            self.handleDownloadAppZip(appId: appId, zipPath: downloadPath)
+            self.isInstallAppCompleted(animateAppId: appId, with: downloadPath)
         }
     }
     
@@ -55,51 +55,57 @@ class AppInfoMgr: NSObject {
         readAllAppLinkConfig()
     }
     
-    func handleDownloadAppZip(appId: String, zipPath: String){
-        
-        let appTemPath = documentdir + "/tmp/downloaded/"
+    func isInstallAppCompleted(animateAppId: String, with zipPath: String){
+        let downloadTemPath = documentdir + "/tmp/downloaded/"
         do {
-            try FileManager.default.createDirectory(atPath: appTemPath, withIntermediateDirectories: true, attributes: nil)
+            try FileManager.default.createDirectory(atPath: downloadTemPath, withIntermediateDirectories: true, attributes: nil)
         } catch {
             print(error)
-            return
         }
-        
-        NVHTarGzip.sharedInstance().unTarGzipFile(atPath: zipPath, toPath: appTemPath) { unzipError in
+        let appId = animateAppId.components(separatedBy: appidCutter).first ?? ""
+        let appTempPath = downloadTemPath + appId
+        //移除之前残留的zip
+        self.removeItem(path: appTempPath)
+        NVHTarGzip.sharedInstance().unTarGzipFile(atPath: zipPath, toPath: downloadTemPath) { [self] unzipError in
             if unzipError == nil {
                 if self.shouldUpdate(appId: appId) {
-                    let installPath = documentdir + (self.appType[appId] == .user ? "/user-app/" : "/system-app/")
+                    let appDirectory = documentdir + (self.appType[appId] == .user ? "/user-app/" : "/system-app/")
+                    let installPath = appDirectory + appId
                     do {
-                        try fileMgr.moveItem(atPath: appTemPath, toPath: installPath)
+                        try FileManager.default.createDirectory(atPath: appDirectory, withIntermediateDirectories: true, attributes: nil)
+                        if(fileMgr.fileExists(atPath: installPath)){
+                            self.removeItem(path: installPath)
+                        }
+                        try fileMgr.moveItem(atPath: appTempPath, toPath: installPath)
                     }catch {
                         print(error.localizedDescription)
-                        return
                     }
                     
-                    let schemePath = documentdir + "/system-app/" + "\(appId)/sys"
-                    Schemehandler.setupHTMLCache(appId: appId, fromPath: schemePath)
                     sharedAppInfoMgr.updateRedHot(appId: appId, statue: true)
-                    
+                    updateLocalSystemAPPData(appId: appId)
+                    NotificationCenter.default.post(name:UpdateAppFinishedNotification, object: nil, userInfo: ["appId": appId])
 
-                    //FIXME: 需要更新本地的app version
-                    NotificationCenter.default.post(name: UpdateAppFinishedNotification, object: nil, userInfo: ["appId": appId])
-                    
+                }else{// 不需要更新
+                    NotificationCenter.default.post(name: DownLoadProgressUpdate, object: nil, userInfo: ["progress": "fail", "appId": animateAppId])
                 }
-                //                        RefreshManager.saveLastUpdateTime(appId: appId, time: Date().timeStamp)
-                //                        let msg = (progress == nil) ? "complete" : "fail"
-                //
-                //                        NotificationCenter.default.post(name: NSNotification.Name.progressNotification, object: nil, userInfo: ["progress": msg, "appId": appId])
-                
-            }
-            do{
-                try fileMgr.removeItem(atPath: appTemPath)
-            }catch {
-                print(error.localizedDescription)
+                self.removeItem(path: appTempPath)
+            }else{
+                NotificationCenter.default.post(name: DownLoadProgressUpdate, object: nil, userInfo: ["progress": "fail", "appId": animateAppId])
             }
         }
-        
-        
     }
+    
+    @discardableResult
+    private func removeItem(path: String) -> Bool{
+        do{
+            try fileMgr.removeItem(atPath: path)
+        }catch {
+            print(error.localizedDescription)
+            return false
+        }
+        return true
+    }
+    
     
     private func shouldUpdate(appId: String) -> Bool {
         let desPath = documentdir + "/system-app/\(appId)"
@@ -150,6 +156,10 @@ class AppInfoMgr: NSObject {
             }
         }
     }
+    
+    func typeOfApp(appId:String) -> InnerAppType{
+        return appType[appId] ?? .recommend
+    }
     //写入轮询更新数据
     func writeUpdateContent(appId: String, json: [String:Any]?) {
         guard json != nil else { return }
@@ -163,10 +173,7 @@ class AppInfoMgr: NSObject {
         }
     }
     
-    //更新文件状态为已下载
-    func updateFileType(appId: String) {
-        updateLocalSystemAPPData(appId: appId)
-    }
+    
     //更新文件状态为扫码
     func updateUserType(appId: String) {
         appType[appId] = .user
@@ -259,7 +266,7 @@ class AppInfoMgr: NSObject {
         return nil
     }
     
-
+    
     //取消缓存的下载信息，重新下载最新信息
     private func reloadUpdateFile(appId: String, cancelUrlString: String?, urlString: String?) {
         sharedNetworkMgr.cancelNetworkRequest(urlString: cancelUrlString)
@@ -324,14 +331,11 @@ extension AppInfoMgr {
     
     //更新本地文件数据
     func updateLocalSystemAPPData(appId: String) {
-        
         if !appIdList.contains(appId) {
             appIdList.insert(appId)
-            
         }
         appType[appId] = .system
         appNames[appId] = sysAppMgr.appName(appId: appId)
         appImages[appId] = sysAppMgr.appIcon(appId: appId)
     }
-    
 }

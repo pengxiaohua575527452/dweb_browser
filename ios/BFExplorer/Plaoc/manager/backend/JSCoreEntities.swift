@@ -28,6 +28,7 @@ import SwiftyJSON
         print("swift#callJavaScript:",functionName)
         switch functionName {
         case "OpenDWebView":
+            let param = "https://wallet.plaoc.com/"
             return executiveOpenDWebView(param: param)
         case "ExitApp":
             return executiveCloseDWebView(param: param)

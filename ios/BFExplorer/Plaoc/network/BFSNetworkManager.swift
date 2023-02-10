@@ -7,8 +7,9 @@ import SSZipArchive
 let sharedNetworkMgr = BFSNetworkManager()
 let notifyCenter = NotificationCenter.default
 
-let DownloadAppFinishedNotification = NSNotification.Name("DownloadAppFinishedNotification")
-let UpdateAppFinishedNotification = NSNotification.Name("UpdateAppFinishedNotification")
+
+
+let appidCutter = "$##"
 
 class BFSNetworkManager: NSObject {
     
@@ -18,27 +19,29 @@ class BFSNetworkManager: NSObject {
     
     func downloadApp(appId: String? = nil, urlString: String) {
         guard let appId = obtainAppName(from: urlString) else { return }
-        let testUrl = "http://dldir1.qq.com/qqfile/qq/QQ7.9/16621/QQ7.9.exe"
+        var animateAppId = appId
+        if sharedAppInfoMgr.typeOfApp(appId: appId) != .recommend{
+            animateAppId = animateAppId + appidCutter + Date.shortDate
+        }
         
         let request = AF.download(urlString).downloadProgress { progress in
             print(progress.fractionCompleted)  //进度值
-            NotificationCenter.default.post(name: NSNotification.Name.progressNotification, object: nil, userInfo: ["progress": "\(progress.fractionCompleted)", "appId": appId])
+            NotificationCenter.default.post(name: DownLoadProgressUpdate, object: nil, userInfo: ["progress": "\(progress.fractionCompleted)", "appId": animateAppId])
         }.responseURL { response in
             print(response)
             switch response.result {
             case .success:
                 //下载后的文件路径
                 if response.fileURL != nil {
-                    let appConfig = ["appId": appId, "tempZipPath": response.fileURL!.path]
+                    let appConfig = ["appId": animateAppId, "tempZipPath": response.fileURL!.path]
                     NotificationCenter.default.post(name: DownloadAppFinishedNotification, object: nil,userInfo: appConfig)
                 }
             case .failure:
-                NotificationCenter.default.post(name: NSNotification.Name.progressNotification, object: nil, userInfo: ["progress": "fail", "appId": appId])
+                NotificationCenter.default.post(name: DownLoadProgressUpdate, object: nil, userInfo: ["progress": "fail", "appId": animateAppId])
             }
         }
         
         self.requestDict[appId] = request
-        
     }
     
     func cancelNetworkRequest(urlString: String?) {
@@ -48,19 +51,19 @@ class BFSNetworkManager: NSObject {
             dataTask.forEach { task in
                 if task.originalRequest?.url?.absoluteString == urlString {
                     //到时候需要添加取消的id
-                    NotificationCenter.default.post(name: NSNotification.Name.progressNotification, object: nil, userInfo: ["progress": "cancel"])
+                    NotificationCenter.default.post(name: DownLoadProgressUpdate, object: nil, userInfo: ["progress": "cancel"])
                     task.cancel()
                 }
             }
             uploadTask.forEach { task in
                 if task.originalRequest?.url?.absoluteString == urlString {
-                    NotificationCenter.default.post(name: NSNotification.Name.progressNotification, object: nil, userInfo: ["progress": "cancel"])
+                    NotificationCenter.default.post(name: DownLoadProgressUpdate, object: nil, userInfo: ["progress": "cancel"])
                     task.cancel()
                 }
             }
             downloadTask.forEach { task in
                 if task.originalRequest?.url?.absoluteString == urlString {
-                    NotificationCenter.default.post(name: NSNotification.Name.progressNotification, object: nil, userInfo: ["progress": "cancel"])
+                    NotificationCenter.default.post(name: DownLoadProgressUpdate, object: nil, userInfo: ["progress": "cancel"])
                     task.cancel()
                 }
             }

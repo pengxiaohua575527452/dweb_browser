@@ -139,8 +139,6 @@ class BrowserContainerViewController: UIViewController,  OverlayShareViewDelegat
                 let webVC = WebViewViewController()
                 webVC.appId = appId
                 webVC.urlString = sharedAppInfoMgr.systemWebAPPURLString(appId: appId) ?? "" //":/index.html"
-                let type = sharedAppInfoMgr.systemAPPType(appId: appId)
-                
                 self.navigationController?.pushViewController(webVC, animated: true)
             }
         }
@@ -153,15 +151,15 @@ class BrowserContainerViewController: UIViewController,  OverlayShareViewDelegat
         }
         
         sharedCachesMgr.addObserver(self, forKeyPath: #keyPath(CachesManager.cachedNewsData), options: .new, context: nil)
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.progressNotification, object: nil, queue: .main) { notify in
+        NotificationCenter.default.addObserver(forName: DownLoadProgressUpdate, object: nil, queue: .main) { notify in
             self.tabViewControllers.forEach({ vc in
-                vc.contentView.homePageView.installingProgressUpdate(notify)
+                vc.contentView.homePageView.downloadProgressUpdate(notify)
             })
         }
         NotificationCenter.default.addObserver(forName: UpdateAppFinishedNotification, object: nil, queue: .main) { notify in
             self.tabViewControllers.forEach({ vc in
                 guard let appId = notify.userInfo?["appId"] as? String else { return }
-                vc.contentView.homePageView.updateAppDone(appId: appId)
+                vc.contentView.homePageView.updateAppDone(animateAppId: appId)
             })
         }
         

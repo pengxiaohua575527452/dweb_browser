@@ -58,7 +58,7 @@ class FirstViewController: UIViewController {
             }
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(update(noti:)), name: NSNotification.Name.progressNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(update(noti:)), name: DownLoadProgressUpdate, object: nil)
         
         operateMonitor.startAnimationMonitor.subscribe(onNext: { [weak self] appId in
             guard let strongSelf = self else { return }
@@ -78,7 +78,7 @@ class FirstViewController: UIViewController {
         DispatchQueue.main.async {
             if type == "complete" {
                 if appId != nil {
-                    sharedAppInfoMgr.updateFileType(appId: appId!)
+//                    sharedAppInfoMgr.updateFileType(appId: appId!)
                     if let index = self.appNames.firstIndex(of: appId!) {
                         let button = self.buttons[index]
                         button.setImage(sharedAppInfoMgr.currentAppImage(appId: appId!), for: .normal)

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -33,6 +33,24 @@
 		19F17A1926F3F2B500D4F9DE /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F17A1826F3F2B500D4F9DE /* KeyboardManager.swift */; };
 		19F17A1B26F3F59800D4F9DE /* NSNotification+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F17A1A26F3F59800D4F9DE /* NSNotification+Helpers.swift */; };
 		19F17A1D26F695B200D4F9DE /* BrowserContainerViewController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F17A1C26F695B200D4F9DE /* BrowserContainerViewController+Keyboard.swift */; };
+		26AC464C29968EEC0089544E /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26AC464B29968EEC0089544E /* Router.swift */; };
+		26AC464E29968F1B0089544E /* Middleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26AC464D29968F1B0089544E /* Middleware.swift */; };
+		26AC46502996902F0089544E /* ServerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26AC464F2996902F0089544E /* ServerResponse.swift */; };
+		26AC4652299691920089544E /* IncomingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26AC4651299691920089544E /* IncomingMessage.swift */; };
+		26AC4654299692010089544E /* QueryString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26AC4653299692010089544E /* QueryString.swift */; };
+		26AC4656299692650089544E /* Fs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26AC4655299692650089544E /* Fs.swift */; };
+		26AC4658299694A00089544E /* Cors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26AC4657299694A00089544E /* Cors.swift */; };
+		26AC465F299718B40089544E /* NIO in Frameworks */ = {isa = PBXBuildFile; productRef = 26AC465E299718B40089544E /* NIO */; };
+		26AC4661299718B40089544E /* NIOConcurrencyHelpers in Frameworks */ = {isa = PBXBuildFile; productRef = 26AC4660299718B40089544E /* NIOConcurrencyHelpers */; };
+		26AC4663299718B40089544E /* NIOCore in Frameworks */ = {isa = PBXBuildFile; productRef = 26AC4662299718B40089544E /* NIOCore */; };
+		26AC4665299718B40089544E /* NIOEmbedded in Frameworks */ = {isa = PBXBuildFile; productRef = 26AC4664299718B40089544E /* NIOEmbedded */; };
+		26AC4667299718B40089544E /* NIOFoundationCompat in Frameworks */ = {isa = PBXBuildFile; productRef = 26AC4666299718B40089544E /* NIOFoundationCompat */; };
+		26AC4669299718B40089544E /* NIOHTTP1 in Frameworks */ = {isa = PBXBuildFile; productRef = 26AC4668299718B40089544E /* NIOHTTP1 */; };
+		26AC466B299718B40089544E /* NIOPosix in Frameworks */ = {isa = PBXBuildFile; productRef = 26AC466A299718B40089544E /* NIOPosix */; };
+		26AC466D299718B40089544E /* NIOTLS in Frameworks */ = {isa = PBXBuildFile; productRef = 26AC466C299718B40089544E /* NIOTLS */; };
+		26AC466F299718B40089544E /* NIOTestUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 26AC466E299718B40089544E /* NIOTestUtils */; };
+		26AC4671299718B40089544E /* NIOWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 26AC4670299718B40089544E /* NIOWebSocket */; };
+		26AC4673299718B40089544E /* _NIOConcurrency in Frameworks */ = {isa = PBXBuildFile; productRef = 26AC4672299718B40089544E /* _NIOConcurrency */; };
 		A95784E17034B1A6095B4719 /* Pods_BFExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14DDFD700ECB4E7A499BECFE /* Pods_BFExplorer.framework */; };
 		F01ABAC328D020690038AF9C /* String+md5.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01ABAC228D020690038AF9C /* String+md5.swift */; };
 		F01ABAC528D020BA0038AF9C /* Date+Famatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01ABAC428D020BA0038AF9C /* Date+Famatter.swift */; };
@@ -202,7 +220,7 @@
 		F39A87172970F53E00CC7126 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39A87162970F53E00CC7126 /* CameraManager.swift */; };
 		F39A87192970F88C00CC7126 /* CameraExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39A87182970F88C00CC7126 /* CameraExtensions.swift */; };
 		F39A871D2971312300CC7126 /* ImageSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39A871C2971312300CC7126 /* ImageSaver.swift */; };
-		F39F45A22994D3D500F7967F /* HTTPServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39F45A12994D3D500F7967F /* HTTPServerManager.swift */; };
+		F39F45A22994D3D500F7967F /* HTTPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39F45A12994D3D500F7967F /* HTTPServer.swift */; };
 		F39F45A62994DD9000F7967F /* Web in Resources */ = {isa = PBXBuildFile; fileRef = F39F45A52994DD9000F7967F /* Web */; };
 		F3A74E882987B505008614BD /* DnsNMM.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74E872987B505008614BD /* DnsNMM.swift */; };
 		F3A74E8A2987B68C008614BD /* DwebModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A74E892987B68C008614BD /* DwebModel.swift */; };
@@ -249,6 +267,13 @@
 		19F17A1826F3F2B500D4F9DE /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
 		19F17A1A26F3F59800D4F9DE /* NSNotification+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNotification+Helpers.swift"; sourceTree = "<group>"; };
 		19F17A1C26F695B200D4F9DE /* BrowserContainerViewController+Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserContainerViewController+Keyboard.swift"; sourceTree = "<group>"; };
+		26AC464B29968EEC0089544E /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		26AC464D29968F1B0089544E /* Middleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Middleware.swift; sourceTree = "<group>"; };
+		26AC464F2996902F0089544E /* ServerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerResponse.swift; sourceTree = "<group>"; };
+		26AC4651299691920089544E /* IncomingMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomingMessage.swift; sourceTree = "<group>"; };
+		26AC4653299692010089544E /* QueryString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryString.swift; sourceTree = "<group>"; };
+		26AC4655299692650089544E /* Fs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fs.swift; sourceTree = "<group>"; };
+		26AC4657299694A00089544E /* Cors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cors.swift; sourceTree = "<group>"; };
 		83115F8F24472E3793A77D81 /* Pods-BFExplorer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BFExplorer.release.xcconfig"; path = "Target Support Files/Pods-BFExplorer/Pods-BFExplorer.release.xcconfig"; sourceTree = "<group>"; };
 		E1A08667C97239F1AB4E03F0 /* Pods-BFExplorer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BFExplorer.debug.xcconfig"; path = "Target Support Files/Pods-BFExplorer/Pods-BFExplorer.debug.xcconfig"; sourceTree = "<group>"; };
 		F01ABAC228D020690038AF9C /* String+md5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+md5.swift"; sourceTree = "<group>"; };
@@ -428,7 +453,7 @@
 		F39A87162970F53E00CC7126 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		F39A87182970F88C00CC7126 /* CameraExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraExtensions.swift; sourceTree = "<group>"; };
 		F39A871C2971312300CC7126 /* ImageSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSaver.swift; sourceTree = "<group>"; };
-		F39F45A12994D3D500F7967F /* HTTPServerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPServerManager.swift; sourceTree = "<group>"; };
+		F39F45A12994D3D500F7967F /* HTTPServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPServer.swift; sourceTree = "<group>"; };
 		F39F45A52994DD9000F7967F /* Web */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Web; sourceTree = "<group>"; };
 		F3A74E872987B505008614BD /* DnsNMM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DnsNMM.swift; sourceTree = "<group>"; };
 		F3A74E892987B68C008614BD /* DwebModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DwebModel.swift; sourceTree = "<group>"; };
@@ -450,7 +475,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26AC4661299718B40089544E /* NIOConcurrencyHelpers in Frameworks */,
+				26AC466B299718B40089544E /* NIOPosix in Frameworks */,
 				A95784E17034B1A6095B4719 /* Pods_BFExplorer.framework in Frameworks */,
+				26AC4673299718B40089544E /* _NIOConcurrency in Frameworks */,
+				26AC4663299718B40089544E /* NIOCore in Frameworks */,
+				26AC4669299718B40089544E /* NIOHTTP1 in Frameworks */,
+				26AC466F299718B40089544E /* NIOTestUtils in Frameworks */,
+				26AC466D299718B40089544E /* NIOTLS in Frameworks */,
+				26AC465F299718B40089544E /* NIO in Frameworks */,
+				26AC4667299718B40089544E /* NIOFoundationCompat in Frameworks */,
+				26AC4671299718B40089544E /* NIOWebSocket in Frameworks */,
+				26AC4665299718B40089544E /* NIOEmbedded in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -976,7 +1012,14 @@
 			isa = PBXGroup;
 			children = (
 				F39F45A52994DD9000F7967F /* Web */,
-				F39F45A12994D3D500F7967F /* HTTPServerManager.swift */,
+				F39F45A12994D3D500F7967F /* HTTPServer.swift */,
+				26AC464B29968EEC0089544E /* Router.swift */,
+				26AC464D29968F1B0089544E /* Middleware.swift */,
+				26AC464F2996902F0089544E /* ServerResponse.swift */,
+				26AC4651299691920089544E /* IncomingMessage.swift */,
+				26AC4653299692010089544E /* QueryString.swift */,
+				26AC4655299692650089544E /* Fs.swift */,
+				26AC4657299694A00089544E /* Cors.swift */,
 			);
 			path = HTTPServer;
 			sourceTree = "<group>";
@@ -1024,6 +1067,19 @@
 			dependencies = (
 			);
 			name = BFExplorer;
+			packageProductDependencies = (
+				26AC465E299718B40089544E /* NIO */,
+				26AC4660299718B40089544E /* NIOConcurrencyHelpers */,
+				26AC4662299718B40089544E /* NIOCore */,
+				26AC4664299718B40089544E /* NIOEmbedded */,
+				26AC4666299718B40089544E /* NIOFoundationCompat */,
+				26AC4668299718B40089544E /* NIOHTTP1 */,
+				26AC466A299718B40089544E /* NIOPosix */,
+				26AC466C299718B40089544E /* NIOTLS */,
+				26AC466E299718B40089544E /* NIOTestUtils */,
+				26AC4670299718B40089544E /* NIOWebSocket */,
+				26AC4672299718B40089544E /* _NIOConcurrency */,
+			);
 			productName = OrionUI;
 			productReference = 1903641426EB427D00B82B1C /* BFExplorer.app */;
 			productType = "com.apple.product-type.application";
@@ -1052,6 +1108,9 @@
 				Base,
 			);
 			mainGroup = 1903640B26EB427D00B82B1C;
+			packageReferences = (
+				26AC465D299718B40089544E /* XCRemoteSwiftPackageReference "swift-nio" */,
+			);
 			productRefGroup = 1903641526EB427D00B82B1C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1134,6 +1193,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26AC464E29968F1B0089544E /* Middleware.swift in Sources */,
 				F091CB172951B8E400FCE565 /* FirstViewController.swift in Sources */,
 				F091CB542951B90A00FCE565 /* RecommendAppManager.swift in Sources */,
 				F0BADEB42986820100B8DCCF /* TopBarEntites.swift in Sources */,
@@ -1150,6 +1210,7 @@
 				1903641826EB427D00B82B1C /* AppDelegate.swift in Sources */,
 				F091CB8A2951B91900FCE565 /* PathFileManager.swift in Sources */,
 				F0292D7F29754E5700C2E464 /* ScanQRCodeVC.swift in Sources */,
+				26AC464C29968EEC0089544E /* Router.swift in Sources */,
 				F091CB1A2951B8E400FCE565 /* CaptureViewController.swift in Sources */,
 				1903646426ED07F600B82B1C /* UIColor+Helpers.swift in Sources */,
 				19EE04C026FA0D0800C41C1B /* URLValidator.swift in Sources */,
@@ -1251,11 +1312,12 @@
 				F0292D9C2975502700C2E464 /* LBXPermissions.swift in Sources */,
 				F0292D992975502700C2E464 /* LBXScanViewController.swift in Sources */,
 				F39A87192970F88C00CC7126 /* CameraExtensions.swift in Sources */,
+				26AC4652299691920089544E /* IncomingMessage.swift in Sources */,
 				F033022A28C73E1700BC0266 /* UIGestureRecognizer+PKExtensions.swift in Sources */,
 				F091CB902951B91900FCE565 /* PhotoManager.swift in Sources */,
 				F39A8713297013CB00CC7126 /* CameraType.swift in Sources */,
 				F091CB392951B8EE00FCE565 /* ScanNetAnimationImageView.swift in Sources */,
-				F39F45A22994D3D500F7967F /* HTTPServerManager.swift in Sources */,
+				F39F45A22994D3D500F7967F /* HTTPServer.swift in Sources */,
 				19128CE526FC0BCE0057E46D /* BrowserTabHomeView.swift in Sources */,
 				F091CBCB2951B93B00FCE565 /* Schemehandler.swift in Sources */,
 				F0292D9B2975502700C2E464 /* LBXScanViewStyle.swift in Sources */,
@@ -1272,6 +1334,7 @@
 				F091CB9D2951B92100FCE565 /* ButtonModel.swift in Sources */,
 				F0A3C3DC2953FA3B00C78D1A /* WKWebViewJavascriptBridgeBase.swift in Sources */,
 				F3A74E8A2987B68C008614BD /* DwebModel.swift in Sources */,
+				26AC4656299692650089544E /* Fs.swift in Sources */,
 				F091CB382951B8EE00FCE565 /* AnimationVIew.swift in Sources */,
 				F0292D9A2975502700C2E464 /* LBXScanLineAnimation.swift in Sources */,
 				F383C6C029557B0D00BD4FE5 /* AdapterHandle.swift in Sources */,
@@ -1306,6 +1369,7 @@
 				F3A74EA4298A6078008614BD /* MicroModule.swift in Sources */,
 				F091CBA52951B92700FCE565 /* NetworkMap.swift in Sources */,
 				F091CB832951B91900FCE565 /* NotificationManager.swift in Sources */,
+				26AC4654299692010089544E /* QueryString.swift in Sources */,
 				1903644D26EB945900B82B1C /* BrowserTabViewController.swift in Sources */,
 				F3A74EAE298BC21D008614BD /* JsProcessNMM.swift in Sources */,
 				1903645826EBB37700B82B1C /* BrowserToolbar.swift in Sources */,
@@ -1317,6 +1381,7 @@
 				F0292D9E2975502700C2E464 /* PhotoHandler.swift in Sources */,
 				F091CB3A2951B8EE00FCE565 /* ProgressAnimationView.swift in Sources */,
 				F091CBCE2951B93B00FCE565 /* XXWebView.swift in Sources */,
+				26AC4658299694A00089544E /* Cors.swift in Sources */,
 				F0292DA42975502700C2E464 /* FWPopupCategory.swift in Sources */,
 				F0292D9D2975502700C2E464 /* LBXScanWrapper.swift in Sources */,
 				F091CB142951B8E400FCE565 /* CustomNaviViewController.swift in Sources */,
@@ -1325,6 +1390,7 @@
 				F39A87172970F53E00CC7126 /* CameraManager.swift in Sources */,
 				F0292DA62975502700C2E464 /* FWPColorCategory.swift in Sources */,
 				F01ABAC528D020BA0038AF9C /* Date+Famatter.swift in Sources */,
+				26AC46502996902F0089544E /* ServerResponse.swift in Sources */,
 				F03301D828C730DE00BC0266 /* OverlayController.swift in Sources */,
 				F091CB9C2951B92100FCE565 /* BottomBarModel.swift in Sources */,
 			);
@@ -1543,6 +1609,75 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		26AC465D299718B40089544E /* XCRemoteSwiftPackageReference "swift-nio" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-nio.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		26AC465E299718B40089544E /* NIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26AC465D299718B40089544E /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIO;
+		};
+		26AC4660299718B40089544E /* NIOConcurrencyHelpers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26AC465D299718B40089544E /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIOConcurrencyHelpers;
+		};
+		26AC4662299718B40089544E /* NIOCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26AC465D299718B40089544E /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIOCore;
+		};
+		26AC4664299718B40089544E /* NIOEmbedded */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26AC465D299718B40089544E /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIOEmbedded;
+		};
+		26AC4666299718B40089544E /* NIOFoundationCompat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26AC465D299718B40089544E /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIOFoundationCompat;
+		};
+		26AC4668299718B40089544E /* NIOHTTP1 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26AC465D299718B40089544E /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIOHTTP1;
+		};
+		26AC466A299718B40089544E /* NIOPosix */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26AC465D299718B40089544E /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIOPosix;
+		};
+		26AC466C299718B40089544E /* NIOTLS */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26AC465D299718B40089544E /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIOTLS;
+		};
+		26AC466E299718B40089544E /* NIOTestUtils */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26AC465D299718B40089544E /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIOTestUtils;
+		};
+		26AC4670299718B40089544E /* NIOWebSocket */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26AC465D299718B40089544E /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIOWebSocket;
+		};
+		26AC4672299718B40089544E /* _NIOConcurrency */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26AC465D299718B40089544E /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = _NIOConcurrency;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1903640C26EB427D00B82B1C /* Project object */;
 }

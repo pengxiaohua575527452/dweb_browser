@@ -110,7 +110,6 @@ class DnsNMM: NativeMicroModule {
     private var connects: [MicroModule: [MMID:NativeIpc]] = [:]
     // 原生fetch
     func nativeFetch(urlString: String, microModule: MicroModule?) -> Any? {
-        print(urlString)
         guard let url = URL(string: urlString) else { return nil }
         
         if url.scheme == nil {

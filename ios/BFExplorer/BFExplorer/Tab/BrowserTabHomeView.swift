@@ -195,12 +195,12 @@ class CategoryView: UIView{
 //
 //            NotificationCenter.default.post(name: openAnAppNotification, object: second)
             
+        } else if type == .recommend {
+//            clickedAppAction(appId: info.appId)
             let testJMM = JsMicroModule(mmid: "test.sys.dweb", metadata: Metadata(main_url: "/app/injectWebView/desktop.worker.js"))
             DnsNMM.shared.install(mm: testJMM)
             DnsNMM.shared.nativeFetch(urlString: "file://dns.sys.dweb/open?app_id=test.sys.dweb", microModule: testJMM)
 //            testJMM.bootstrap()
-        } else if type == .recommend {
-            clickedAppAction(appId: info.appId)
         } else if type == .user {
             clickedAppAction(appId: info.appId)
         }

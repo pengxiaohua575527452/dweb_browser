@@ -112,6 +112,7 @@ extension CustomWebView {
     }
     
     func openWebView(html: String) {
+        print("openWebView: \(html)")
         var html_url = html + "\(html.contains("?") ? "&" : "?")v=\(Date().timeIntervalSince1970)"
         if let url = URL(string: html_url) {
             let request = URLRequest(url: url)

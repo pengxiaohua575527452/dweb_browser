@@ -12,11 +12,12 @@ class DnsNMM: NativeMicroModule {
     
     var apps: [MMID: MicroModule] = [:]
     
-    private var bootNMM = BootNMM(mmid: "boot.sys.dweb")
-    private var multiWebViewNMM = MultiWebViewNMM(mmid: "mwebview.sys.dweb")
+    private var bootNMM = BootNMM()
+    private var multiWebViewNMM = MultiWebViewNMM()
     var jsProcessNMM = JsProcessNMM()
-    override init(mmid:MMID = "dns.sys.dweb") {
-        super.init(mmid:mmid)
+    
+    convenience init() {
+        self.init(mmid: "dns.sys.dweb")
         self.install(mm: bootNMM)
         self.install(mm: multiWebViewNMM)
         self.install(mm: jsProcessNMM)

@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct IpcStreamData {
-    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.stream_data
-}
-
-extension IpcStreamData: IpcMessage {}
+//struct IpcStreamData {
+//    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.stream_data
+//}
+//
+//extension IpcStreamData: IpcMessage {}

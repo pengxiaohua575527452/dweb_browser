@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct IpcResponse {
-    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.response
-    var req_id: Int
-}
-
-extension IpcResponse: IpcMessage {}
+//struct IpcResponse {
+//    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.response
+//    var req_id: Int
+//}
+//
+//extension IpcResponse: IpcMessage {}

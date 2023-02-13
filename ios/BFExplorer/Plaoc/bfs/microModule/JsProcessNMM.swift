@@ -17,8 +17,9 @@ class JsProcessNMM: NativeMicroModule {
     var all_ipc_cache: [Int:NativeIpc] = [:]
     
     private var acc_process_id = 0
-    override init(mmid:MMID = "js.sys.dweb") {
-        super.init(mmid:mmid)
+    
+    convenience init() {
+        self.init(mmid: "js.sys.dweb")
         _ = webview
         
         Routers["/create-process"] = { args in
@@ -129,48 +130,27 @@ extension JsProcessNMM: WKScriptMessageHandler {
 //            if self.all_ipc_cache.index(forKey: process_id) == nil { return }
             
             print(url)
-//            let resBody = DnsNMM.shared.nativeFetch(urlString: url, microModule: self)
-            var urlSession = URLSession.shared
+            let resBody = DnsNMM.shared.nativeFetch(urlString: url, microModule: self)
             
-            do {
-                var request = try URLRequest(url: URL(string: "http://xxx.js.sys.dweb.80.localhost:26000/test?a=1")!, method: .post)
-                request.httpBodyStream = InputStream(data: Data(bytes: [1,2], count: 2))
+            var res: IpcResponse
+            let req_id = args["req_id"].intValue
+            let headers = ["Content-Type":"text/plain"]
+//            do {
+                if let body = resBody as? String {
+                    res = IpcResponse(req_id: req_id, statusCode: 200, body: body, headers: headers)
+                } else if let body = resBody as? [String:Any] {
+                    res = IpcResponse(req_id: req_id, statusCode: 200, body: ChangeTools.dicValueString(body) ?? "", headers: headers)
+                } else if resBody != nil {
+//                    try res = IpcResponse(req_id: req_id, statusCode: 200, body: "\(resBody)", headers: headers)
+                    res = IpcResponse(req_id: req_id, statusCode: 200, body: "\(resBody!)", headers: headers)
+                } else {
+                    res = IpcResponse(req_id: req_id, statusCode: 404, body: "no found handler for \(args["pathname"].stringValue)", headers: headers)
+                }
+//            } catch let err {
+//                res = IpcResponse(req_id: req_id, statusCode: 500, body: "\(err)", headers: headers)
+//            }
 
-                let task = urlSession.dataTask(
-                    with: request,
-                    completionHandler: { data, response, error in
-                        // Validate response and call handler
-                        if data != nil {
-                            print(data)
-                        }
-                    }
-                )
-
-                task.resume()
-            } catch {
-                
-            }
-            
-            
-//            var res: IpcResponse
-//            let req_id = args["req_id"].intValue
-//            let headers = ["Content-Type":"text/plain"]
-////            do {
-//                if let body = resBody as? String {
-//                    res = IpcResponse(req_id: req_id, statusCode: 200, body: body, headers: headers)
-//                } else if let body = resBody as? [String:Any] {
-//                    res = IpcResponse(req_id: req_id, statusCode: 200, body: ChangeTools.dicValueString(body) ?? "", headers: headers)
-//                } else if resBody != nil {
-////                    try res = IpcResponse(req_id: req_id, statusCode: 200, body: "\(resBody)", headers: headers)
-//                    res = IpcResponse(req_id: req_id, statusCode: 200, body: "\(resBody!)", headers: headers)
-//                } else {
-//                    res = IpcResponse(req_id: req_id, statusCode: 404, body: "no found handler for \(args["pathname"].stringValue)", headers: headers)
-//                }
-////            } catch let err {
-////                res = IpcResponse(req_id: req_id, statusCode: 500, body: "\(err)", headers: headers)
-////            }
-//
-//            self.ipcResponseMessage(res: res, process_id: process_id)
+            self.ipcResponseMessage(res: res, process_id: process_id)
         } else if(message.name == "logging") {
             print(message.body)
         } else if(message.name == "portForward") {

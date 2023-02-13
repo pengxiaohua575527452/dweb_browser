@@ -17,9 +17,8 @@ class BootNMM: NativeMicroModule {
         return true
     }
     
-    override init(mmid:MMID = "boot.sys.dweb") {
-        super.init(mmid:mmid)
-        
+    convenience init() {
+        self.init(mmid: "boot.sys.dweb")
         Routers["/register"] = { args in
             guard let args = args as? [String:MMID] else { return false }
             

@@ -63,8 +63,8 @@ class HttpNMM: NativeMicroModule {
         return true
     }
     
-    override init(mmid:MMID = "https.sys.dweb") {
-        super.init(mmid:mmid)
+    convenience init() {
+        self.init(mmid: "http.sys.dweb")
         
         Routers["/listen"] = { args in
             

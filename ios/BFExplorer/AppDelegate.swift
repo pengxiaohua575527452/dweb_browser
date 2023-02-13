@@ -20,35 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        appVersionMgr.startCheck()
 //
 //        window?.rootViewController = UINavigationController(rootViewController: FirstViewController())
-        DispatchQueue.global().async {
-            let app = HttpServer()
-
-            app.get("/test") { req, res, next in
-                print("listen get 26000")
-                print(req.header)
-                res.json(["a":"1"])
-            }
-            app.post("/test") { req, res, next in
-                print("listen post 26000")
-                print(req.header)
-                print(req.body)
-                res.json(["b":1])
-            }
-
-            app.listen(26000)
-        }
-        
-//        Task(priority: .background) {
-//            let app = HttpServer()
-//
-//            app.get("/test") { req, res, next in
-//                print("listen listen 26000")
-//                print(req.header)
-//                res.json(["a":"1"])
-//            }
-//
-//            app.listen(26000)
-//        }
         
         DnsNMM.shared.bootstrap()
        

@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct IpcStreamAbort {
-    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.stream_abort
-}
-
-extension IpcStreamAbort: IpcMessage {}
+//struct IpcStreamAbort {
+//    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.stream_abort
+//}
+//
+//extension IpcStreamAbort: IpcMessage {}

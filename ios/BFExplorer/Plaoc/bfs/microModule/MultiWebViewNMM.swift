@@ -12,8 +12,8 @@ class MultiWebViewNMM: NativeMicroModule {
     var viewTree: ViewTree = ViewTree()
 //    var Routers: [String:(Any) -> Any] = [:]
     
-    override init(mmid:MMID = "boot.sys.dweb") {
-        super.init(mmid:mmid)
+    convenience init() {
+        self.init(mmid: "mwebview.sys.dweb")
         Routers["/open"] = { args in
             guard let args = args as? [String:Any] else { return false }
             

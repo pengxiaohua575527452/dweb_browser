@@ -114,20 +114,15 @@ extension CustomWebView {
     func openWebView(html: String) {
         print("openWebView: \(html)")
         if HttpServer.address != nil && html.hasPrefix("http") && html.contains(HttpServer.address!) {
-            if let url = URL(string: html) {
-                let host = "\(url.host ?? HttpServer.app.http.server.configuration.hostname):\(url.port ?? HttpServer.app.http.server.configuration.port)"
-                // internal.js.sys.dweb-80
-                let subdomain_mmid_port = host.replacingOccurrences(of: ".\(HttpServer.address!)", with: "")
-                let port = subdomain_mmid_port.split(separator: "-")[1]
-                let _url = html.replacingOccurrences(of: "\(subdomain_mmid_port).", with: "")
-                let hostArr = subdomain_mmid_port.replacingOccurrences(of: "-\(port)", with: "").split(separator: ".")
-                let mmid = hostArr[hostArr.count-3...hostArr.count-1]
-                print("final url: \(_url)")
+            if let url = URL(string: html), let hostname = url.host {
+                let host = "\(hostname):\(url.port ?? HttpServer.app.http.server.configuration.port)"
+                // internal.js.sys.dweb-80.
+                let subdomain_mmid_port = host.replacingOccurrences(of: HttpServer.address!, with: "")
+                let _url = html.replacingOccurrences(of: subdomain_mmid_port, with: "")
                 
                 if let url = URL(string: _url) {
                     var request = URLRequest(url: url)
-                    request.setValue(subdomain_mmid_port, forHTTPHeaderField: "User-Agent")
-                    print(request)
+                    request.setValue(host, forHTTPHeaderField: "User-Agent")
                     
                     self.webView.load(request)
                 }

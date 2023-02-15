@@ -137,9 +137,9 @@ struct GetHostOptions {
     var subdomain: String?
 }
 
-class HttpNMM: NativeMicroModule {
-    private var _tokenMap: [/* token */String:PortListener] = [:]
-    private var _gatewayMap: [/* host */String:PortListener] = [:]
+class HttpServerNMM: NativeMicroModule {
+    var tokenMap: [/* token */String:PortListener] = [:]
+    var gatewayMap: [/* host */String:PortListener] = [:]
 
     convenience init() {
         self.init(mmid: "http.sys.dweb")
@@ -178,16 +178,106 @@ class HttpNMM: NativeMicroModule {
                     return self.unlisten(hostOptions: HostParam(port: port, mmid: mmid, subdomain: subdomain))
                 }
                 
-                app.get("") { req in
-                    print(req)
-                    return ""
-                }
+                app.middleware.use(RequestMiddleware())
                 
                 try app.start()
             } catch {
                 fatalError("http server start error: \(error)")
             }
         }
+    }
+    
+    /// 拦截所有请求
+    struct RequestMiddleware: Middleware {
+        func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
+            var host = "*"
+            
+            if request.headers.contains(name: "User-Agent") {
+                host = request.headers.first(name: "User-Agent")!
+                
+                print("RequestMiddleware host: \(host)")
+            }
+            
+            // 网关未找到判断
+            let gateway = DnsNMM.shared.httpServerNMM.gatewayMap[host]
+            if gateway == nil && !request.url.path.hasPrefix("/http.sys.dweb") {
+                let promise = request.eventLoop.makePromise(of: Response.self)
+                promise.succeed(
+                    DnsNMM.shared.httpServerNMM.defaultErrorResponse(
+                        req: request,
+                        statusCode: .badGateway,
+                        errorMessage: "Bad Gateway",
+                        detailMessage: "作为网关或者代理工作的服务器尝试执行请求时，从远程服务器接收到了一个无效的响应"
+                    )
+                )
+
+                return promise.futureResult
+            }
+            
+            // 未找到路由判断
+            let app = HttpServer.app
+            let routes = app.routes.all
+            if !routes.contains(where: { route in
+                let routePath = "/" + route.path.map { "\($0)" }.joined(separator: "/")
+                if routePath == request.url.path && route.method == request.method {
+                    return true
+                } else {
+                    return false
+                }
+            }) {
+                let promise = request.eventLoop.makePromise(of: Response.self)
+                promise.succeed(
+                    DnsNMM.shared.httpServerNMM.defaultErrorResponse(
+                        req: request,
+                        statusCode: .notFound,
+                        errorMessage: "not found",
+                        detailMessage: "未找到"
+                    )
+                )
+                
+                return promise.futureResult
+            }
+            
+            
+            return next.respond(to: request)
+        }
+    }
+    
+    /// 网关错误，默认返回
+    func defaultErrorResponse(req: Request, statusCode: HTTPResponseStatus, errorMessage: String, detailMessage: String) -> Response {
+//            let headers = req.headers.reduce(into: [:]) { $0[$1.0] = $1.1 }
+        var headerJsonString = ""
+        _ = req.headers.map { item in
+            headerJsonString += "\(item.name): \(item.value)\n"
+        }
+        
+        return Response(status: statusCode, body: .init(string: """
+            <!DOCTYPE html>
+                <html>
+                    <head>
+                        <meta charset="UTF-8" />
+                        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <title>\(statusCode.code)</title>
+                    </head>
+                    <body>
+                        <h1 style="color:red;margin-top:50px;">[\(statusCode.code)] \(errorMessage)</h1>
+                        <blockquote>\(detailMessage)</blockquote>
+                        <div>
+                          <h2>URL:</h2>
+                          <pre>\(req.url)</pre>
+                        </div>
+                        <div>
+                          <h2>METHOD:</h2>
+                          <pre>\(req.method)</pre>
+                        </div>
+                        <div>
+                          <h2>HEADERS:</h2>
+                          <pre>\(headerJsonString)</pre>
+                        </div>
+                  </body>
+            </html>
+        """))
     }
     
     private func listen(hostOptions: HostParam) -> (String, String) {
@@ -197,21 +287,21 @@ class HttpNMM: NativeMicroModule {
         // TODO: 未完成base64加密
         let token = "dweb-browser-random-token"
         
-        self._gatewayMap[host] = PortListener(ipc: nil, host: host, origin: origin)
+        self.gatewayMap[host] = PortListener(ipc: nil, host: host, origin: origin)
         return (token, origin)
     }
     
     private func unlisten(hostOptions: HostParam) -> Bool {
         let host = self.getHost(hostOption: HostParam(port: hostOptions.port, mmid: hostOptions.mmid, subdomain: hostOptions.subdomain))
         
-        let gateway = self._gatewayMap[host]
+        let gateway = self.gatewayMap[host]
         
         if gateway == nil {
             return false
         }
         
-        self._tokenMap.removeValue(forKey: host)
-        self._gatewayMap.removeValue(forKey: host)
+        self.tokenMap.removeValue(forKey: host)
+        self.gatewayMap.removeValue(forKey: host)
         
         return true
     }

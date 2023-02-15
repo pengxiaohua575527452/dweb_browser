@@ -14,16 +14,15 @@ class DnsNMM: NativeMicroModule {
     
     private var bootNMM = BootNMM()
     private var multiWebViewNMM = MultiWebViewNMM()
-    private var httpNMM = HttpNMM()
+    var httpServerNMM = HttpServerNMM()
     var jsProcessNMM = JsProcessNMM()
     
     convenience init() {
         self.init(mmid: "dns.sys.dweb")
         self.install(mm: bootNMM)
         self.install(mm: multiWebViewNMM)
-        self.install(mm: httpNMM)
+        self.install(mm: httpServerNMM)
         self.install(mm: jsProcessNMM)
-        print(apps)
         
         // 注册桌面
         let desktopJmm = NativeMicroModule(mmid: "desktop.sys.dweb")

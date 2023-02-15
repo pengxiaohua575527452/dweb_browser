@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        appVersionMgr.startCheck()
 //
 //        window?.rootViewController = UINavigationController(rootViewController: FirstViewController())
+        
         DnsNMM.shared.bootstrap()
        
         return true

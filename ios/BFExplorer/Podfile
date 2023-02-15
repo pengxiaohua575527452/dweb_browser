@@ -22,7 +22,6 @@ target 'BFExplorer' do
   pod 'SwiftSoup'
   pod 'SwiftyTimer'
   pod 'MessagePack.swift', '~> 4.0'
-  pod 'CocoaHTTPServer'
 
   # Pods for BFExplorer
 

@@ -184,54 +184,6 @@ var $messageToIpcMessage = (data) => {
   }
   return message;
 };
-var NativeIpc = class extends Ipc {
-  constructor(port) {
-    super();
-    this.port = port;
-    this._cbs = /* @__PURE__ */ new Set();
-    this._closed = false;
-    this._onclose_cbs = /* @__PURE__ */ new Set();
-    port.addEventListener('message', (event) => {
-      const message = $messageToIpcMessage(event.data);
-      if (message === void 0) {
-        return;
-      }
-      if (message === 'close') {
-        this.close();
-        return;
-      }
-      for (const cb of this._cbs) {
-        cb(message);
-      }
-    });
-    port.start();
-  }
-  postMessage(message) {
-    if (this._closed) {
-      return;
-    }
-    this.port.postMessage(message);
-  }
-  onMessage(cb) {
-    this._cbs.add(cb);
-    return () => this._cbs.delete(cb);
-  }
-  close() {
-    if (this._closed) {
-      return;
-    }
-    this._closed = true;
-    this.port.postMessage('close');
-    this.port.close();
-    for (const cb of this._onclose_cbs) {
-      cb();
-    }
-  }
-  onClose(cb) {
-    this._onclose_cbs.add(cb);
-    return () => this._onclose_cbs.delete(cb);
-  }
-};
 
 // src/sys/js-process.worker.cts
 var installEnv = async () => {
@@ -272,7 +224,10 @@ var installEnv = async () => {
           status: ipc_response.statusCode
         });
       })();
+    } else if(parsed_url.protocol === 'http:' && parsed_url.hostname.startsWith('http.sys.dweb')) {
+        url = url.replace('http.sys.dweb', 'localhost:22605/http.sys.dweb') + '&mmid=js.sys.dweb';
     }
+      
     return native_fetch(url, init);
   };
 };

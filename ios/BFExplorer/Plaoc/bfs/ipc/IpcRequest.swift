@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct IpcRequest {
-    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.request
-}
-
-extension IpcRequest: IpcMessage {}
+//struct IpcRequest {
+//    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.request
+//}
+//
+//extension IpcRequest: IpcMessage {}

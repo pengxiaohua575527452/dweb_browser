@@ -6,7 +6,7 @@
 //
 
 class BootNMM: NativeMicroModule {
-    var registeredMmids: Set<String> = ["desktop.sys.dweb"]
+    var registeredMmids: Set<String> = ["desktop.sys.dweb", "http.sys.dweb"]
     
 //    private var Routers: [String:(Any) -> Any] = [:]
     override func _bootstrap() -> Any {
@@ -17,9 +17,8 @@ class BootNMM: NativeMicroModule {
         return true
     }
     
-    override init(mmid:MMID = "boot.sys.dweb") {
-        super.init(mmid:mmid)
-        
+    convenience init() {
+        self.init(mmid: "boot.sys.dweb")
         Routers["/register"] = { args in
             guard let args = args as? [String:MMID] else { return false }
             

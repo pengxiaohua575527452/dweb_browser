@@ -17,24 +17,19 @@ class JsMicroModule: MicroModule {
     var process_id: Int?
 
     override func _bootstrap() -> Any {
-        do {
-            var url: URL?
-            if self.metadata.main_url.hasPrefix("http") {
-                url = URL(string: self.metadata.main_url)
-            } else {
-                url = URL(fileURLWithPath: Bundle.main.bundlePath + self.metadata.main_url)
-            }
-            
-            if url == nil {
-                return false
-            }
-            
-            let content = try String(contentsOf: url!, encoding: .utf8)
-            process_id = DnsNMM.shared.nativeFetch(urlString: "file://js.sys.dweb/create-process?main_code=\(content.encodeURIComponent())", microModule: self) as? Int
-            print("JsMicroModule process_id: \(process_id!)")
-        } catch {
-            print("JsMicroModule url parse content error: \(error)")
+        var url: URL?
+        if self.metadata.main_url.hasPrefix("http") {
+            url = URL(string: self.metadata.main_url)
+        } else {
+            url = URL(fileURLWithPath: Bundle.main.bundlePath + self.metadata.main_url)
         }
+        
+        if url == nil {
+            return false
+        }
+        
+        process_id = DnsNMM.shared.nativeFetch(urlString: "file://js.sys.dweb/create-process?main_pathname=\(url!.path)", microModule: self) as? Int
+        print("JsMicroModule process_id: \(process_id!)")
         
         return true
     }

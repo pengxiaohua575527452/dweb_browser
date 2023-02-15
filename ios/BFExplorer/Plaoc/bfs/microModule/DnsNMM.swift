@@ -12,13 +12,16 @@ class DnsNMM: NativeMicroModule {
     
     var apps: [MMID: MicroModule] = [:]
     
-    private var bootNMM = BootNMM(mmid: "boot.sys.dweb")
-    private var multiWebViewNMM = MultiWebViewNMM(mmid: "mwebview.sys.dweb")
+    private var bootNMM = BootNMM()
+    private var multiWebViewNMM = MultiWebViewNMM()
+    private var httpNMM = HttpNMM()
     var jsProcessNMM = JsProcessNMM()
-    override init(mmid:MMID = "dns.sys.dweb") {
-        super.init(mmid:mmid)
+    
+    convenience init() {
+        self.init(mmid: "dns.sys.dweb")
         self.install(mm: bootNMM)
         self.install(mm: multiWebViewNMM)
+        self.install(mm: httpNMM)
         self.install(mm: jsProcessNMM)
         print(apps)
         
@@ -110,7 +113,6 @@ class DnsNMM: NativeMicroModule {
     private var connects: [MicroModule: [MMID:NativeIpc]] = [:]
     // 原生fetch
     func nativeFetch(urlString: String, microModule: MicroModule?) -> Any? {
-        print(urlString)
         guard let url = URL(string: urlString) else { return nil }
         
         if url.scheme == nil {
@@ -174,7 +176,6 @@ class DnsNMM: NativeMicroModule {
                     }
                 }
             }
-            print(connects)
             
             guard let mm = DnsNMM.shared.apps[mmid] as? NativeMicroModule else { return nil }
             

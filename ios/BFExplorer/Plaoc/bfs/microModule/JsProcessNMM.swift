@@ -17,14 +17,15 @@ class JsProcessNMM: NativeMicroModule {
     var all_ipc_cache: [Int:NativeIpc] = [:]
     
     private var acc_process_id = 0
-    override init(mmid:MMID = "js.sys.dweb") {
-        super.init(mmid:mmid)
+    
+    convenience init() {
+        self.init(mmid: "js.sys.dweb")
         _ = webview
         
         Routers["/create-process"] = { args in
             guard let args = args as? [String:String] else { return nil }
             
-            if args["main_code"] == nil {
+            if args["main_pathname"] == nil {
                 return nil
             }
             
@@ -35,7 +36,7 @@ class JsProcessNMM: NativeMicroModule {
             self.webview.configuration.userContentController.add(LeadScriptHandle(messageHandle: self), contentWorld: WKContentWorld.world(name: String(process_id)), name: "logging")
             self.webview.configuration.userContentController.add(LeadScriptHandle(messageHandle: self), contentWorld: WKContentWorld.world(name: String(process_id)), name: "portForward")
             
-            self.hookJavascriptWorker(process_id: process_id, main_code: args["main_code"]!)
+            self.hookJavascriptWorker(process_id: process_id, main_pathname: args["main_pathname"]!)
             
             return process_id
         }
@@ -59,6 +60,10 @@ class JsProcessNMM: NativeMicroModule {
         }
     }
     
+    override func _bootstrap() -> Any {
+        return true
+    }
+    
     func evaluateJavaScript(text: String, process_id: Int) {
         DispatchQueue.main.async {
             self.webview.evaluateJavaScript(text, in: nil, in: WKContentWorld.world(name: String(process_id))) { result in
@@ -72,15 +77,16 @@ class JsProcessNMM: NativeMicroModule {
         }
     }
     
-    func hookJavascriptWorker(process_id: Int, main_code: String) {
+    func hookJavascriptWorker(process_id: Int, main_pathname: String) {
         DispatchQueue.global().async {
             do {
+                let main_code = try String(contentsOf: main_pathname.hasPrefix("http") ? URL(string: main_pathname)! : URL(fileURLWithPath: main_pathname), encoding: .utf8)
                 let injectWorkerDir = URL(fileURLWithPath: Bundle.main.bundlePath + "/app/injectWebView/worker.js")
                 let injectWorkerCode = try String(contentsOf: injectWorkerDir, encoding: .utf8).replacingOccurrences(of: "\"use strict\";", with: "")
                 let workerCode = """
                     data:utf-8,
                  ((module,exports=module.exports)=>{\(injectWorkerCode.encodeURIComponent());return module.exports})({exports:{}}).installEnv();
-                 \(main_code)
+                 \(main_code.encodeURIComponent())
                 """
                 
                 let text = """
@@ -88,8 +94,13 @@ class JsProcessNMM: NativeMicroModule {
                     const webworker = new Worker(`\(workerCode)`);
                     try {
                         webworker.onmessage = (evt) => {
-                            evt.data['process_id'] = \(process_id);
-                            window.webkit.messageHandlers.webworkerOnmessage.postMessage(JSON.stringify(evt.data));
+                            if(typeof evt.data === 'string') {
+                                window.webkit.messageHandlers.logging.postMessage(evt.data);
+                            } else {
+                                evt.data['process_id'] = \(process_id);
+                                window.webkit.messageHandlers.webworkerOnmessage.postMessage(JSON.stringify(evt.data));
+                            }
+                            
                         }
                     } catch(e) {
                         window.webkit.messageHandlers.logging.postMessage('error');
@@ -97,6 +108,7 @@ class JsProcessNMM: NativeMicroModule {
                     }
                     ''
                 """
+                ClipboardManager.write(content: text, ofType: .string)
                 self.evaluateJavaScript(text: text, process_id: process_id)
             } catch {
                 print("JsProcessNMM hookJavascriptWorker error: \(error)")
@@ -148,7 +160,7 @@ extension JsProcessNMM: WKScriptMessageHandler {
 //            } catch let err {
 //                res = IpcResponse(req_id: req_id, statusCode: 500, body: "\(err)", headers: headers)
 //            }
-            
+
             self.ipcResponseMessage(res: res, process_id: process_id)
         } else if(message.name == "logging") {
             print(message.body)

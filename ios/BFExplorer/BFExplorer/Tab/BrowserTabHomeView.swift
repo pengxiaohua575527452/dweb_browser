@@ -199,6 +199,7 @@ class CategoryView: UIView{
             DnsNMM.shared.install(mm: testJMM)
             DnsNMM.shared.nativeFetch(urlString: "file://dns.sys.dweb/open?app_id=test.sys.dweb", microModule: testJMM)
 //            testJMM.bootstrap()
+            
         } else if type == .recommend {
             clickedAppAction(appId: info.appId)
         } else if type == .user {

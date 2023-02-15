@@ -25,27 +25,15 @@ class BrowserTabViewController: UIViewController {
     private var startYOffset = CGFloat(0)
     var shouldAddToHistory = false
     @objc var hasLoadedUrl = false
-    //    {
-    //        didSet{
-    //            self.delegate?.updateToolbarButtons()
-    //        }
-    //    }
     weak var delegate: BrowserTabViewControllerDelegate?
     
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-//        contentView.statusBarBackgroundView.backgroundColor = .white
         let isBackgroundColorDark = contentView.statusBarBackgroundView.backgroundColor?.isDark ?? false
-//        return isBackgroundColorDark ? .lightContent : .default
-        return .darkContent
+        return isBackgroundColorDark ? .lightContent : .default
     }
     
     var style: UIStatusBarStyle = .default
-     
-    // 重现statusBar相关方法
-//    override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return self.style
-//    }
     
     override func loadView() {
         view = contentView
@@ -56,10 +44,7 @@ class BrowserTabViewController: UIViewController {
         setupWebView()
         let btn = UIButton(frame: CGRect(x: 100, y: 100, width: 100, height: 30))
         btn.backgroundColor = .clear
-//        view.addSubview(btn)
-//        btn.addTarget(self, action: #selector(changeStyle), for: .touchUpInside)
-        
-        
+    
     }
     
     @objc func changeStyle(_ sender: Any) {
@@ -137,10 +122,6 @@ class BrowserTabViewController: UIViewController {
         }
     }
     
-    //    override var preferredStatusBarStyle: UIStatusBarStyle {
-    //        return .lightContent // .default
-    //    }
-    
     func loadWebsite(from url: URL) {
 
         //if the url is same as last one, the url keypath observer won't be trigered, so the hasLoadUrl is still false, the homepageView alpha won't be the right status
@@ -205,8 +186,6 @@ private extension BrowserTabViewController {
     
     internal override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-//        sharedCachesMgr.addObserver(self, forKeyPath: #keyPath(CachesManager.cachedNewsData), options: .new, context: nil)
         contentView.homePageView.hotArticleView?.addObserver(self, forKeyPath: "clickedLink", options: .new, context: nil)
         
         NotificationCenter.default.addObserver(forName: ShowAllBookmarksWhenCountMoreThan8, object: nil, queue: .main) { notify in
@@ -215,14 +194,7 @@ private extension BrowserTabViewController {
         }
         
         self.navigationController?.navigationBar.barStyle = .black;
-
-        
     }
-//    internal override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-////        sharedCachesMgr.removeObserver(self, forKeyPath: "datas")
-////        sharedCachesMgr.removeObserver(self, forKeyPath: "clickedLink")
-//    }
 }
 
 // MARK: Action methods

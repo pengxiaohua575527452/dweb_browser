@@ -107,7 +107,7 @@ class BrowserContainerViewController: UIViewController,  OverlayShareViewDelegat
         openNewTab(isHidden: false)
         NotificationCenter.default.addObserver(forName: newsLinkClickedNotification, object: nil, queue: .main) { notify in
             print("-----******in BrowserContainerViewController newsLinkClickedNotification")
-
+            
             guard let link = notify.object as? String else { return }
             let addressBar = self.currentAddressBar
             addressBar.updateStateWhenClicked(link: link)
@@ -118,22 +118,18 @@ class BrowserContainerViewController: UIViewController,  OverlayShareViewDelegat
         
         NotificationCenter.default.addObserver(forName: bookmarksWasEditedNotification, object: nil, queue: .main) {_ in
             print("-----******in BrowserContainerViewController bookmarksWasEditedNotification")
-
             for vc in self.tabViewControllers{
                 vc.contentView.homePageView.reloadBookMarkView()
             }
-//            contentView.homePageView.reloadBookMarkView()
-
+            
         }
         
         NotificationCenter.default.addObserver(forName: hideKeyboardAfterScrollviewDidScrolled, object: nil, queue: .main) { notify in
             print("-----******in BrowserContainerViewController hideKeyboardAfterScrollviewDidScrolled")
-
+            
             self.dismissKeyboard()
         }
         contentView.toolbar.bottomToolbarDelegate = self
-        
-        
         NotificationCenter.default.addObserver(forName: openAnAppNotification, object: nil, queue: .main) {notify in
             if let appId = notify.object as? String{
                 let webVC = WebViewViewController()
@@ -168,25 +164,21 @@ class BrowserContainerViewController: UIViewController,  OverlayShareViewDelegat
     }
     
     func setCancelButtonHidden(_ isHidden: Bool) {
-//        if shouldHideHomePage{
-            UIView.animate(withDuration: 0.1) {
-                self.contentView.cancelButton.alpha = isHidden ? 0 : 1
-            }
-//        }
+        UIView.animate(withDuration: 0.1) {
+            self.contentView.cancelButton.alpha = isHidden ? 0 : 1
+        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if #available(iOS 13.0, *) {
-//            let statusBar = UIView(frame: UIApplication.shared.keyWindow?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero)
-//            statusBar.backgroundColor = .darkGray
-//            UIApplication.shared.keyWindow?.addSubview(statusBar)
+            //            let statusBar = UIView(frame: UIApplication.shared.keyWindow?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero)
+            //            statusBar.backgroundColor = .darkGray
+            //            UIApplication.shared.keyWindow?.addSubview(statusBar)
         }
         edgesForExtendedLayout = []
         self.navigationController?.view.backgroundColor = .white
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         view.backgroundColor = .white
-//        extendedLayoutIncludesOpaqueBars = false;
-//                self.modalPresentationCapturesStatusBarAppearance = false;
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -195,7 +187,7 @@ class BrowserContainerViewController: UIViewController,  OverlayShareViewDelegat
         case #keyPath(CachesManager.cachedNewsData):
             DispatchQueue.main.async {
                 print("-----******in BrowserContainerViewController observeValue")
-                self.tabViewControllers.map { controller in
+                self.tabViewControllers.forEach { controller in
                     guard let newsList = sharedCachesMgr.fetchNews(), newsList.count > 0 else { return }
                     controller.contentView.homePageView.hotArticleView?.updateHotNewsList(newsList: newsList)
                 }
@@ -254,10 +246,10 @@ private extension BrowserContainerViewController {
     
     func dismissKeyboard() {
         print("homepage alpha observe place --2: \(self.tabViewControllers[currentTabIndex].contentView.homePageView.alpha)")
-
+        
         view.endEditing(true)
         print("homepage alpha observe place --3: \(self.tabViewControllers[currentTabIndex].contentView.homePageView.alpha)")
-
+        
     }
     
     func updateAddressBarsAfterTabChange() {
@@ -299,7 +291,6 @@ private extension BrowserContainerViewController {
 extension BrowserContainerViewController: BrowserAddressBarDelegate {
     func addressBarReloadButtonClicked() {
         tabViewControllers[currentTabIndex].contentView.webView.reload()
-        
     }
     
     func addressBarDidBeginEditing() {
@@ -363,29 +354,18 @@ extension BrowserContainerViewController: BrowserToolBarDelegate {
     
     //添加历史记录
     func appendLinkToHistory(from webview: WKWebView) {
-        
-        
         guard let url = webview.url else { return }
         var title = url.host?.deletingPrefix("www.")
         if webview.title != nil {
             title = webview.title
         }
-//        title = title ?? url.host?.deletingPrefix("www.")
-        
-//        if var title = webview.title} else { title = url.host?.deletingPrefix("www.")}
-//        let title = webview.title!.count > 0 ? webview.title : url.host?.deletingPrefix("www.")
         let iconUrl = obtainUrlImagelink(on: webview)
-        print("history icon: \(iconUrl)-----title:\(title) absoluteString:\(url.absoluteString)", "host: \(url.host)")
-
-        
+        print("history icon: \(iconUrl)-----title:\(String(describing: title)) absoluteString:\(url.absoluteString)", "host: \(String(describing: url.host))")
         sharedCachesMgr.appendLinkTocache(type: .history, iconString: iconUrl, title: title!, linkUrl:  url.absoluteString, completion:{})
     }
     //添加书签
-        func appendLinkToBookmark(of webview: WKWebView) {
-            
-        }
     func clickAppendBookmark(){
-
+        
         let webView = self.tabViewControllers[currentTabIndex].contentView.webView
         let iconUrl = obtainUrlImagelink(on: webView)
         let url = webView.url
@@ -396,28 +376,21 @@ extension BrowserContainerViewController: BrowserToolBarDelegate {
             for vc in self.tabViewControllers{
                 vc.contentView.homePageView.reloadBookMarkView()
             }
-            
         }
         
         if sharedCachesMgr.appendLinkTocache(type: .bookmark, iconString: iconUrl, title: title, linkUrl:  url!.absoluteString, completion:block){
-            
-            
             DispatchQueue.main.async {
                 //update something
                 print("-----******in BrowserContainerViewController clickAppendBookmark")
-
                 var style = ToastStyle()
-                
                 // this is just one of many style options
                 style.messageColor = .white
                 style.backgroundColor = .gray
-                
                 // present the toast with the new style
                 self.view.makeToast("已经添加到书签", duration: 3.0, position: .bottom, style: style)
             }
         }
     }
-    
     
     func goHomePageClicked() {
         let currentContentView = self.tabViewControllers[self.currentTabIndex].contentView as BrowserTabContentView
@@ -434,10 +407,10 @@ extension BrowserContainerViewController: BrowserToolBarDelegate {
         print("estimatedProgress 2---",currentContentView.webView.estimatedProgress)
         updateToolbarButtons()
         self.tabViewControllers[self.currentTabIndex].updateStatusBarBkColor()
-
+        
         contentView.addressBars[currentTabIndex].setLoadingProgress(1, animated: true)
-//        contentView.addressBars[currentTabIndex]?.setLoadingProgress(1, animated: true)
-
+        //        contentView.addressBars[currentTabIndex]?.setLoadingProgress(1, animated: true)
+        
     }
     
     

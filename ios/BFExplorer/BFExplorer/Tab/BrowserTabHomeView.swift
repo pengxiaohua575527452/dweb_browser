@@ -342,7 +342,7 @@ class BrowserTabHomeView: UIView, UIScrollViewDelegate {
     }
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(UIView.alpha){
-            print(change)
+            print(change as Any)
         }
     }
     
@@ -407,7 +407,7 @@ class BrowserTabHomeView: UIView, UIScrollViewDelegate {
             info.appId == animateAppId
         }){
             guard let image = PKImageExtensions.image(with: .cyan,size: CGSize(width: 120, height: 120)) else { return }
-            var appInfo = AppInfo(appName: "临时 App", appId: animateAppId)
+            var appInfo = AppInfo(appName: "BFS Ex", appId: animateAppId)
             appInfo.appIcon = image
             onDeckApps.append(appInfo)
             downloadingAppIds.append(animateAppId)

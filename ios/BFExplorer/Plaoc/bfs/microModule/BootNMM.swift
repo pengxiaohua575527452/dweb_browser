@@ -6,7 +6,7 @@
 //
 
 class BootNMM: NativeMicroModule {
-    var registeredMmids: Set<String> = ["desktop.sys.dweb"]
+    var registeredMmids: Set<String> = ["desktop.sys.dweb", "http.sys.dweb"]
     
 //    private var Routers: [String:(Any) -> Any] = [:]
     override func _bootstrap() -> Any {

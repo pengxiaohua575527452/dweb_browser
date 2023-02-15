@@ -14,12 +14,14 @@ class DnsNMM: NativeMicroModule {
     
     private var bootNMM = BootNMM()
     private var multiWebViewNMM = MultiWebViewNMM()
+    private var httpNMM = HttpNMM()
     var jsProcessNMM = JsProcessNMM()
     
     convenience init() {
         self.init(mmid: "dns.sys.dweb")
         self.install(mm: bootNMM)
         self.install(mm: multiWebViewNMM)
+        self.install(mm: httpNMM)
         self.install(mm: jsProcessNMM)
         print(apps)
         
@@ -174,7 +176,6 @@ class DnsNMM: NativeMicroModule {
                     }
                 }
             }
-            print(connects)
             
             guard let mm = DnsNMM.shared.apps[mmid] as? NativeMicroModule else { return nil }
             

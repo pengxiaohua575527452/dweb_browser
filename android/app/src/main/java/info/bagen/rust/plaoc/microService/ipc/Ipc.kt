@@ -1,6 +1,6 @@
 package info.bagen.rust.plaoc.microService.ipc
 
-import info.bagen.rust.plaoc.microService.ipc.helder.*
+import info.bagen.rust.plaoc.microService.ipc.helper.*
 
 var ipc_uid_acc = 0
 
@@ -10,40 +10,44 @@ abstract class Ipc {
     val remote:TMicroModule  get() { return  TMicroModule() }
     val role: IPC_ROLE get() { return IPC_ROLE.SERVER }
 
-    protected val _messageSignal = createSignal<OnIpcMessage>();
+    val _messageSignal = createSignal<ipcSignal>()
     fun postMessage(message: IpcMessage) {
         if (this._closed) {
             return;
         }
         this._doPostMessage(message);
     }
+
     abstract fun _doPostMessage(data: IpcMessage): Void;
-    private fun _getOnRequestListener(cb: OnIpcRequestMessage): Int {
-        val signal = createSignal<OnIpcRequestMessage>();
-        this._messageSignal.listen(fun(request, ipc) {
-            if (IPC_DATA_TYPE.REQUEST.equals(request.type)) {
+    private fun _getOnRequestListener(cb: OnIpcRequestMessage): Signal<ipcSignal> {
+        val signal = createSignal<ipcSignal>()
+        this._messageSignal.listen { args ->
+            val request = args[0] as IpcRequest
+            val ipc = args[1]  as Ipc
+            if (IPC_DATA_TYPE.REQUEST == request.type) {
                 signal.emit(request, ipc);
             }
-        })
-        return signal.acc
+        }
+        return signal
     }
 
-   fun onRequest(cb: OnIpcRequestMessage): Int {
+   fun onRequest(cb: OnIpcRequestMessage): Signal<ipcSignal> {
         return this._getOnRequestListener(cb);
     }
-    abstract fun _doClose(): Void;
+    abstract fun _doClose(): Void
 
-    private var _closed = false;
+    private var _closed = false
     fun close() {
         if (this._closed) {
             return;
         }
         this._closed = true;
         this._doClose();
-        this._closeSignal.emit(null,null);
+        this._closeSignal.emit(null,null)
     }
-    private val _closeSignal = createSignal<() -> Any>();
-    val onClose = this._closeSignal.acc;
+    private val _closeSignal = createSignal<ipcSignal>();
+    val onMessage = this._messageSignal
+    val onClose =  this._closeSignal
 
     private val _reqresMap = mutableMapOf<Number, IpcResponse>();
     private var _req_id_acc = 0;
@@ -70,4 +74,5 @@ abstract class Ipc {
 //        });
     }
 }
+
 

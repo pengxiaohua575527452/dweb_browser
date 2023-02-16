@@ -1,6 +1,7 @@
 package info.bagen.rust.plaoc.microService.ipc
 
 import com.google.gson.annotations.SerializedName
+import info.bagen.rust.plaoc.microService.ipc.helper.IPC_DATA_TYPE
 import info.bagen.rust.plaoc.microService.network.gson
 
 data class IpcResponse(
@@ -8,8 +9,9 @@ data class IpcResponse(
     @SerializedName("statusCode") val statusCode: Number = 200,
     @SerializedName("body") val body: String = "",
     @SerializedName("headers") val headers: MutableMap<String, String> = mutableMapOf(),
-    @SerializedName("type") val type: Int = 1
 ){
+    val type = IPC_DATA_TYPE.RESPONSE
+
     fun fromJson(): String? {
         this.headers["Content-Type"] = "application/json"
         return gson.toJson(this)

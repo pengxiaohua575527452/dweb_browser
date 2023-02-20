@@ -128,7 +128,53 @@ class PortListener {
         return nil
     }
     
-//    func hookHttpRequest(req: )
+    func hookHttpRequest(req: Request) {
+        let url = req.url.path
+        let method = req.method
+        
+        var ipc_req_body_stream: Data = Data()
+        
+        if method == .POST || method == .PUT {
+            var sequential = req.eventLoop.makeSucceededFuture(())
+            
+            req.body.drain {
+                switch $0 {
+                case .buffer(var buffer):
+                    if buffer.readableBytes > 0 {
+                        ipc_req_body_stream.append(buffer.readData(length: buffer.readableBytes)!)
+                    }
+                    
+                    return sequential
+                case .error(_):
+                    return sequential
+                case .end:
+                    return sequential
+                }
+            }
+        }
+        
+//        let filePath = rootFilePath(fileName: fileName) + path
+//        guard FileManager.default.fileExists(atPath: filePath) else { return "" }
+//        let stream = InputStream(fileAtPath: filePath)
+//        stream?.open()
+//        defer {
+//            stream?.close()
+//        }
+//
+//        let bufferSize = 1024
+//        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
+//        defer {
+//            buffer.deallocate()
+//        }
+//        var result: String = ""
+//        while stream!.hasBytesAvailable {
+//            let length = stream!.read(buffer, maxLength: bufferSize)
+//            let data = Data(bytes: buffer, count: length)
+//            let content = String(data: data, encoding: .utf8) ?? ""
+//            result += content
+//        }
+//        return result
+    }
 }
 
 struct GetHostOptions {
@@ -245,7 +291,6 @@ class HttpServerNMM: NativeMicroModule {
     
     /// 网关错误，默认返回
     func defaultErrorResponse(req: Request, statusCode: HTTPResponseStatus, errorMessage: String, detailMessage: String) -> Response {
-//            let headers = req.headers.reduce(into: [:]) { $0[$1.0] = $1.1 }
         var headerJsonString = ""
         _ = req.headers.map { item in
             headerJsonString += "\(item.name): \(item.value)\n"

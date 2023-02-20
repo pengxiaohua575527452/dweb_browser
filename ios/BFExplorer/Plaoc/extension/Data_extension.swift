@@ -12,4 +12,20 @@ extension Data {
     func hexString() -> String {
         return map { String(format: "%02x", $0)}.joined(separator: "").uppercased()
     }
+    
+    /// Inputstream -> Data
+    init(reading inputStream: InputStream) {
+        self.init()
+        inputStream.open()
+        let bufferSize = 1024
+        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
+        defer {
+            buffer.deallocate()
+        }
+        while inputStream.hasBytesAvailable {
+            let bytesRead = inputStream.read(buffer, maxLength: bufferSize)
+            self.append(buffer, count: bytesRead)
+        }
+        inputStream.close()
+    }
 }

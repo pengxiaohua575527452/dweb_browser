@@ -7,8 +7,13 @@
 
 import Foundation
 
-//struct IpcStreamEnd {
-//    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.stream_end
-//}
-//
-//extension IpcStreamEnd: IpcMessage {}
+struct IpcStreamEnd {
+    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.stream_end
+    let stream_id: String
+    
+    init(stream_id: String) {
+        self.stream_id = stream_id
+    }
+}
+
+extension IpcStreamEnd: IpcMessage {}

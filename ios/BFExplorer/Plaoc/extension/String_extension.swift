@@ -115,4 +115,12 @@ extension String {
         let endIndex = self.index(self.startIndex, offsetBy: end > 0 ? end - 1 : (self.count - 1 + end))
         return String(self[beginIndex...endIndex])
     }
+    
+    func to_b64_data() -> Data? {
+        Data(base64Encoded: self)
+    }
+    
+    func to_utf8_data() -> Data? {
+        self.data(using: .utf8)
+    }
 }

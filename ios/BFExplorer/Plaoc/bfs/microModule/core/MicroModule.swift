@@ -72,4 +72,8 @@ class MicroModule: NSObject {
         }
         return try _connect(from: from)
     }
+    
+    func fetch(req: IpcRequest, res: IpcResponse) {
+        
+    }
 }

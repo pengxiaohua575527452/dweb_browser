@@ -21,7 +21,9 @@ target 'BFExplorer' do
   pod 'EmptyDataSet-Swift'
   pod 'SwiftSoup'
   pod 'SwiftyTimer'
-  pod 'MessagePack.swift', '~> 4.0'
+  
+  # https://github.com/hirotakan/MessagePacker
+  pod 'MessagePacker'
 
   # Pods for BFExplorer
 

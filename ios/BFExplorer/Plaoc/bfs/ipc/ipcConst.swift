@@ -22,6 +22,8 @@ enum IPC_DATA_TYPE: Int, Codable {
     case stream_end = 4
     /** 类型：流中断，请求方 */
     case stream_abort = 5
+    /** 应用于序列化反序列化，IpcMessageData默认值 */
+    case unknown = 1000
 }
 
 // 位移枚举
@@ -67,8 +69,14 @@ enum IPC_ROLE: String, Codable {
 }
 
 /** Ipc消息通用协议 */
-protocol IpcMessage {}
+protocol IpcMessage: Codable {
+    var type: IPC_DATA_TYPE { get }
+}
+struct IpcMessageData: IpcMessage {
+    var type: IPC_DATA_TYPE = .unknown
+}
 
 /** message: 只会有两种类型的数据 */
 typealias OnIpcMessage = ((IpcMessage, Ipc)) -> SIGNAL_CTOR?
+typealias Callback<T, R> = (T) -> R?
 

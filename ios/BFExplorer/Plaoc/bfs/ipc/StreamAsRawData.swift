@@ -18,7 +18,9 @@ func streamAsRawData(stream_id: String, stream: InputStream, ipc: Ipc) async {
                 if message.desiredSize != nil {
                     var buffer = byteChannel.allocator.buffer(capacity: 16000)
                     stream.read(&buffer, maxLength: message.desiredSize!)
-                    ipc.postMessage(message: IpcStreamData(stream_id: stream_id, data: buffer))
+                    let data = Data(buffer: buffer)
+                    
+                    ipc.postMessage(message: IpcStreamData(stream_id: stream_id, data: S_RawData(data: data)))
                 }
             } else if let message = message as? IpcStreamAbort, message.stream_id == stream_id {
                 stream.close()
@@ -45,7 +47,7 @@ func rawDataToBody(rawBody: RawData, ipc: Ipc) -> Any {
         let stream_id = rawBody.data.string!
         var stream: InputStream?
         
-        let semaphore = DispatchSemaphore(value: 1)
+        let semaphore = DispatchSemaphore(value: 0)
         
         _ = ipc.onMessage { (message, ipc) in
             if let message = message as? IpcStreamData, message.stream_id == stream_id {

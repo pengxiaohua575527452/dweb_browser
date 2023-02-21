@@ -8,21 +8,21 @@
 import Foundation
 
 struct IpcStreamData {
-    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.stream_data
+    var type: IPC_DATA_TYPE = .stream_data
     let stream_id: String
-    let data: Any
+    let data: S_RawData
     
-    init(stream_id: String, data: Any) {
+    init(stream_id: String, data: S_RawData) {
         self.stream_id = stream_id
         self.data = data
     }
     
     static func fromBinary(ipc: Ipc, stream_id: String, data: Data) -> IpcStreamData {
-        if ipc.support_message_pack {
-            return IpcStreamData(stream_id: stream_id, data: data)
+        if ipc.suport_bianry {
+            return IpcStreamData(stream_id: stream_id, data: S_RawData(data: data))
         }
         
-        return IpcStreamData(stream_id: stream_id, data: data.base64EncodedString())
+        return IpcStreamData(stream_id: stream_id, data: S_RawData(string:data.base64EncodedString()))
     }
 }
 

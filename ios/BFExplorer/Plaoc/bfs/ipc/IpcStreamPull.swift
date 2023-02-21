@@ -8,7 +8,7 @@
 import Foundation
 
 struct IpcStreamPull {
-    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.stream_pull
+    var type: IPC_DATA_TYPE = .stream_pull
     let stream_id: String
     var desiredSize: Int?
     

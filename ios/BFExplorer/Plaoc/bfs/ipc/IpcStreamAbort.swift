@@ -8,7 +8,7 @@
 import Foundation
 
 struct IpcStreamAbort {
-    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.stream_abort
+    var type: IPC_DATA_TYPE = .stream_abort
     let stream_id: String
     
     init(stream_id: String) {

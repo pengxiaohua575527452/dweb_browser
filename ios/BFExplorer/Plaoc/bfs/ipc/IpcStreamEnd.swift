@@ -8,7 +8,7 @@
 import Foundation
 
 struct IpcStreamEnd {
-    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.stream_end
+    var type: IPC_DATA_TYPE = .stream_end
     let stream_id: String
     
     init(stream_id: String) {

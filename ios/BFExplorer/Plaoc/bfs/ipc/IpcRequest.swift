@@ -8,12 +8,12 @@
 import Foundation
 import Vapor
 
-class IpcRequest: IpcBody {
-    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.request
-    let req_id: Int
-    let method: IpcMethod
-    let url: String
-    let headers: IpcHeaders
+final class IpcRequest: IpcBody {
+    var type: IPC_DATA_TYPE = .request
+    var req_id: Int
+    var method: IpcMethod
+    var url: String
+    var headers: IpcHeaders
     
     init(req_id: Int, method: IpcMethod, url: String, rawBody: RawData, headers: IpcHeaders, ipc: Ipc) {
         self.req_id = req_id
@@ -112,4 +112,33 @@ class IpcRequest: IpcBody {
 
 extension IpcRequest: IpcMessage {}
 
-
+extension IpcRequest: Codable {
+    private enum CodeKey: CodingKey {
+        case type
+        case req_id
+        case url
+        case method
+        case headers
+        case rawBody
+    }
+    
+    convenience init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodeKey.self)
+        type = try values.decode(IPC_DATA_TYPE.self, forKey: .type)
+        req_id = try values.decode(Int.self, forKey: .req_id)
+        url = try values.decode(String.self, forKey: .url)
+        method = try values.decode(IpcMethod.self, forKey: .method)
+        headers = try values.decode(IpcHeaders.self, forKey: .headers)
+        rawBody = try values.decode(RawData.self, forKey: .rawBody)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodeKey.self)
+        try container.encode(type, forKey: .type)
+        try container.encode(req_id, forKey: .req_id)
+        try container.encode(url, forKey: .url)
+        try container.encode(method, forKey: .method)
+        try container.encode(headers, forKey: .headers)
+        try container.encode(rawBody, forKey: .rawBody)
+    }
+}

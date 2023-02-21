@@ -15,7 +15,7 @@ import Vapor
 //}
 
 class IpcBody{
-    let rawBody: RawData
+    var rawBody: RawData
     let ipc: Ipc
     var body: Any
 
@@ -26,7 +26,7 @@ class IpcBody{
     init(rawBody: RawData, ipc: Ipc) {
         self.rawBody = rawBody
         self.ipc = ipc
-        self.body = try rawDataToBody(rawBody: rawBody, ipc: ipc)
+        self.body = rawDataToBody(rawBody: rawBody, ipc: ipc)
 
         switch body {
         case let data as String:

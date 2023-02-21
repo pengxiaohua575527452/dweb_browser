@@ -8,10 +8,10 @@
 import Foundation
 import Vapor
 
-class IpcResponse: IpcBody {
-    var type: IPC_DATA_TYPE = IPC_DATA_TYPE.response
-    let req_id: Int
-    let statusCode: Int
+final class IpcResponse: IpcBody {
+    var type: IPC_DATA_TYPE = .response
+    var req_id: Int
+    var statusCode: Int
     var headers: IpcHeaders
     
     init(req_id: Int, statusCode: Int, rawBody: RawData, headers: IpcHeaders, ipc: Ipc) {
@@ -93,3 +93,31 @@ class IpcResponse: IpcBody {
 }
 
 extension IpcResponse: IpcMessage {}
+
+extension IpcResponse: Codable {
+    private enum CodeKey: CodingKey {
+        case type
+        case req_id
+        case statusCode
+        case headers
+        case rawBody
+    }
+    
+    convenience init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodeKey.self)
+        type = try values.decode(IPC_DATA_TYPE.self, forKey: .type)
+        req_id = try values.decode(Int.self, forKey: .req_id)
+        statusCode = try values.decode(Int.self, forKey: .statusCode)
+        headers = try values.decode(IpcHeaders.self, forKey: .headers)
+        rawBody = try values.decode(RawData.self, forKey: .rawBody)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodeKey.self)
+        try container.encode(type, forKey: .type)
+        try container.encode(req_id, forKey: .req_id)
+        try container.encode(statusCode, forKey: .statusCode)
+        try container.encode(headers, forKey: .headers)
+        try container.encode(rawBody, forKey: .rawBody)
+    }
+}

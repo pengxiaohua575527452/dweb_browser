@@ -53,6 +53,7 @@ import info.bagen.rust.plaoc.webView.network.dWebView_host
 import info.bagen.rust.plaoc.webView.openDWebWindow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
+import info.bagen.dwebbrowser.R
 
 class MainActivity : AppCompatActivity() {
     var isQRCode = false //是否是识别二维码
@@ -108,6 +109,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }, onOpenDWebview = { appId, dAppInfo ->
                         dWebView_host = appId
+                        dWebBrowserModel.openDWebBrowser(dAppInfo!!.url)
                         /// TODO 这里是点击桌面app触发的事件，因此要传递给我们运行在js.sys.dweb的代码，也就是后端代码
 //                        val workerResponse =
 //                            nativeFetch("file://js.sys.dweb/create-process?mainCode=https://objectjson.waterbang.top/desktop.worker.js")

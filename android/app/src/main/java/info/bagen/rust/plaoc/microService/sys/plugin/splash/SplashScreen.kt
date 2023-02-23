@@ -26,7 +26,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import info.bagen.rust.plaoc.App
-import info.bagen.rust.plaoc.R
+import info.bagen.dwebbrowser.R
 
 class SplashScreen(
     private var context: Context = App.appContext, private var config: SplashScreenConfig

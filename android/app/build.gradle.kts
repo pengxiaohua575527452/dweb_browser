@@ -8,7 +8,7 @@ plugins {
 android {
     compileSdk = 33
     defaultConfig {
-        applicationId = "info.bagen.rust.plaoc"
+        applicationId = "info.bagen.dwebbrowser"
         minSdk = 28
         targetSdk = 33
         versionCode = 1

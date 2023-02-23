@@ -47,7 +47,7 @@ class SplashActivity : AppCompatActivity() {
                 RustApplicationTheme {
                     SplashMainView()
                     SplashPrivacyDialog(
-                        openHome = { openHomeActivity() },
+                        openHome = { openHomeActivity(); finish() },
                         openWebView = { url -> openDWebWindow(this, url) },
                         closeApp = { finish() }
                     )
@@ -56,10 +56,11 @@ class SplashActivity : AppCompatActivity() {
             }
         } else {
             /// TODO 这里启动 DNS？
-            GlobalScope.launch {
+            /*GlobalScope.launch {
                 startDwebBrowser()
             }
-            App.appContext.saveBoolean(KEY_APP_FIRST_LOAD, false)
+            App.appContext.saveBoolean(KEY_APP_FIRST_LOAD, false)*/
+            openHomeActivity()
             finish()
         }
     }

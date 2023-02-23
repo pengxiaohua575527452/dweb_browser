@@ -9,8 +9,7 @@ import com.king.app.dialog.AppDialogConfig
 import com.king.mlkit.vision.barcode.BarcodeCameraScanActivity
 import com.king.mlkit.vision.camera.AnalyzeResult
 import com.king.mlkit.vision.camera.config.ResolutionCameraConfig
-import info.bagen.rust.plaoc.ExportNative
-import info.bagen.rust.plaoc.R
+import info.bagen.dwebbrowser.R
 import info.bagen.rust.plaoc.util.lib.drawRect
 
 /** 条形码扫码*/

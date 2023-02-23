@@ -13,6 +13,7 @@ import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.RejectedExecutionHandler
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
+import info.bagen.dwebbrowser.R
 
 
 val NOTIFICATION_TITLE: CharSequence = "WorkRequest Starting"

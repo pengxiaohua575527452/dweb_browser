@@ -34,9 +34,8 @@ import com.king.mlkit.vision.camera.CameraScan
 import com.king.mlkit.vision.camera.analyze.Analyzer
 import com.king.mlkit.vision.camera.util.LogUtils
 import com.king.mlkit.vision.camera.util.PermissionUtils
-import info.bagen.rust.plaoc.ExportNative
 import info.bagen.rust.plaoc.MainActivity
-import info.bagen.rust.plaoc.R
+import info.bagen.dwebbrowser.R
 import info.bagen.rust.plaoc.util.lib.drawRect
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="info.bagen.rust.plaoc">
+    package="info.bagen.dwebbrowser">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -24,7 +24,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
 
     <application
-        android:name=".App"
+        android:name="info.bagen.rust.plaoc.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -36,7 +36,7 @@
             tools:targetApi="29" />
 
         <activity
-            android:name=".webView.DWebViewActivity"
+            android:name="info.bagen.rust.plaoc.webView.DWebViewActivity"
             android:exported="true"
             android:launchMode="standard"
             android:theme="@style/Theme.plaoc">
@@ -53,7 +53,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SplashActivity"
+            android:name="info.bagen.rust.plaoc.SplashActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.plaoc">
@@ -64,16 +64,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="info.bagen.rust.plaoc.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.plaoc" />
         <activity
-            android:name=".system.barcode.MultipleQRCodeScanningActivity"
+            android:name="info.bagen.rust.plaoc.microService.sys.plugin.barcode.MultipleQRCodeScanningActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CameraScanTheme" />
         <activity
-            android:name=".system.barcode.QRCodeScanningActivity"
+            android:name="info.bagen.rust.plaoc.microService.sys.plugin.barcode.QRCodeScanningActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/CameraScanTheme">
@@ -84,24 +84,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".system.barcode.BarcodeScanningActivity"
+            android:name="info.bagen.rust.plaoc.microService.sys.plugin.barcode.BarcodeScanningActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CameraScanTheme" />
-
-        <service
-            android:name=".DenoService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="info.bagen.rust.plaoc.DenoService" />
-            </intent-filter>
-        </service>
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <receiver android:name=".broadcast.BFSBroadcastReceiver" />
+        <receiver android:name="info.bagen.rust.plaoc.broadcast.BFSBroadcastReceiver" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

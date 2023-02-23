@@ -21,7 +21,7 @@ import com.king.app.dialog.AppDialog
 import com.king.app.dialog.AppDialogConfig
 import com.king.mlkit.vision.barcode.QRCodeCameraScanActivity
 import com.king.mlkit.vision.camera.AnalyzeResult
-import info.bagen.rust.plaoc.R
+import info.bagen.dwebbrowser.R
 import info.bagen.rust.plaoc.util.lib.drawRect
 
 

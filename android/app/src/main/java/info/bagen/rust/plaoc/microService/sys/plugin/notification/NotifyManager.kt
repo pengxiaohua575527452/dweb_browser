@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import info.bagen.rust.plaoc.App
 import info.bagen.rust.plaoc.MainActivity
-import info.bagen.rust.plaoc.R
+import info.bagen.dwebbrowser.R
 import info.bagen.rust.plaoc.microService.sys.plugin.deepLink.DWebReceiver
 
 class NotifyManager {
